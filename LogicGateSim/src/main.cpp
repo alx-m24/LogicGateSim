@@ -5,8 +5,11 @@
 // My headers
 #include "Headers/MainLoop.hpp"
 #include "Headers/Common.hpp"
+#include "Headers/Object.hpp"
+#include "Headers/Gates.hpp"
 
 sf::RenderWindow* window;
+std::vector<Object*> objects;
 
 int main() {
 	// window settings
@@ -22,6 +25,11 @@ int main() {
 	Loop loop;
 
 	srand(time(0));
+
+	NotGate notgate(sf::Vector2f(400, 300));
+	objects.push_back(&notgate);
+	AndGate andGate(sf::Vector2f(200, 300));
+	objects.push_back(&andGate);
 
 	// main loop
 	while (Mainwindow.isOpen())
