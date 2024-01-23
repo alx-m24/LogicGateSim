@@ -21,12 +21,24 @@
     <ClCompile Include="src\Headers\MainLoop.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Headers\Object.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Headers\Gates.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Headers\MainLoop.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Headers\Common.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Headers\Object.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Headers\Gates.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

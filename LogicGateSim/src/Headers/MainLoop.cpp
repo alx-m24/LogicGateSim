@@ -29,14 +29,30 @@ void Loop::Input() {
 			break;
 		}
 	}
+	for (Object* obj : objects)
+	{
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+		{
+			sf::Vector2f mousePos = sf::Vector2f(sf::Mouse::getPosition(*window));
+			if (obj->getGlobalBounds().contains(mousePos)) obj->setPosition(mousePos);
+		}
+	}
 }
 
 void Loop::Update()
 {
 	window->clear(sf::Color::Black);
+	for (Object* obj : objects)
+	{
+		obj->updateObj();
+	}
 }
 
 void Loop::Render()
 {
+	for (Object* obj : objects)
+	{
+		window->draw(*obj);
+	}
 	window->display();
 }
