@@ -1,6 +1,87 @@
 #include "MainLoop.hpp"
+#include <iostream>
+
+Loop::Loop()
+{
+	addWireTex.loadFromFile("C:\\Users\\alexa\\Coding\\C++\\LogicGateSim\\LogicGateSim\\Resources\\AddWire.png");
+	addWireTex.generateMipmap();
+	addWireTex.setSmooth(true);
+
+	addWireSprite.setTexture(addWireTex);
+	addWireSprite.setOrigin(sf::Vector2f(addWireTex.getSize()) / 2.0f);
+	addWireSprite.setScale(0.2f, 0.2f);
+	addWireSprite.setPosition(window->getSize().x / 2.0f, window->getSize().y * 2 / 3);
+}
+
+void Loop::Connect()
+{
+	
+}
+
+void Loop::updateObjs()
+{
+	for (Object* obj : objects)
+	{
+		bool hover = obj->getGlobalBounds().contains(mousePos);
+		if (hover)
+		{
+			if (left) obj->setPosition(mousePos);
+			if (mid && !obj->lastMid) {
+				if (addWire) {
+					Wire* w = wires[wires.size() - 1];
+					w->outputObj = obj;
+				}
+				else {
+					Wire* w = new Wire;
+					(*w)[1].position = obj->getPosition();
+					w->inputObj = obj;
+					wires.push_back(w);
+				}
+				addWire = !addWire;
+			}
+		}
+		obj->lastMid = mid;
+	}
+}
+
+void Loop::updateNodes()
+{
+	for (Node* n : nodes)
+	{
+		bool hover = n->getGlobalBounds().contains(mousePos);
+
+		if (hover) {
+			if (left) {
+				n->setPosition(mousePos);
+				addWire = false;
+			}
+			if (right && !n->lastRight && n->type == Node::Input) {
+				n->state = !n->state;
+				addWire = false;
+			}
+			if (mid && !n->lastMid) {
+				if (addWire) {
+					Wire* w = wires[wires.size() - 1];
+					w->outputNode = n;
+				}
+				else {
+					Wire* w = new Wire;
+					(*w)[1].position = n->getPosition();
+					w->inputNode = n;
+					wires.push_back(w);
+				}
+				addWire = !addWire;
+			}
+		}
+
+		n->lastMid = mid;
+		n->lastRight = right;
+	}
+}
 
 void Loop::Input() {
+	mousePos = sf::Vector2f(sf::Mouse::getPosition(*window));
+
 	sf::Event event;
 	// processing sfml events
 	while (window->pollEvent(event)) {
@@ -12,6 +93,11 @@ void Loop::Input() {
 		case sf::Event::Resized: {
 			sf::View view(sf::FloatRect(0, 0, event.size.width, event.size.height));
 			window->setView(view);
+			addWireSprite.setPosition(window->getSize().x / 2.0f, window->getSize().y * 2 / 3);
+			break;
+		}
+		case sf::Event::MouseButtonPressed: {
+			if (event.mouseButton.button != sf::Mouse::Middle) addWire = false;
 			break;
 		}
 		case sf::Event::KeyPressed: {
@@ -29,55 +115,34 @@ void Loop::Input() {
 			break;
 		}
 	}
-	for (Object* obj : objects)
-	{
-		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-		{
-			sf::Vector2f mousePos = sf::Vector2f(sf::Mouse::getPosition(*window));
-			if (obj->getGlobalBounds().contains(mousePos)) obj->setPosition(mousePos);
-		}
-	}
-	for (Node* n : nodes)
-	{
-		sf::Vector2f mousePos = sf::Vector2f(sf::Mouse::getPosition(*window));
-		bool hover = n->getGlobalBounds().contains(mousePos);
-		bool left = sf::Mouse::isButtonPressed(sf::Mouse::Left);
-		bool right = sf::Mouse::isButtonPressed(sf::Mouse::Right);
 
-		if (hover) {
-			if (left) {
-				n->setPosition(mousePos);
-			}
-			if (right && !n->lastRight && n->type == Node::Input) {
-				n->state = !n->state;
-			}
-		}
-		n->lastRight = right;
-	}
+	left = sf::Mouse::isButtonPressed(sf::Mouse::Left);
+	right = sf::Mouse::isButtonPressed(sf::Mouse::Right);
+	mid = sf::Mouse::isButtonPressed(sf::Mouse::Middle);
+
+	updateObjs();
+	updateNodes();
+
+	Connect();
+
+	lastAdd = addWire;
 }
 
 void Loop::Update()
 {
 	window->clear(sf::Color::Black);
-	for (Object* obj : objects)
-	{
-		obj->updateObj();
-	}
-	for (Node* n : nodes)
-	{
-		n->updateNode();
-	}
+
+	for (Wire* w : wires) w->updateWire();
+	for (Object* obj : objects) obj->updateObj();
+	for (Node* n : nodes) n->updateNode();
 }
 
 void Loop::Render()
 {
-	for (Object* obj : objects)
-	{
-		window->draw(*obj);
-	}
-	for (Node* n : nodes)
-	{
-		window->draw(*n);
-	}
+	for (Wire* w : wires) window->draw(*w);
+	for (Object* obj : objects) window->draw(*obj);
+	for (Node* n : nodes) window->draw(*n);
+	if (addWire) window->draw(addWireSprite);
+
 	window->display();
 }

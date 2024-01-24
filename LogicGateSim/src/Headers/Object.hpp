@@ -12,4 +12,5 @@ public:
 
 	std::vector<bool> inputs;
 	std::vector<bool> outputs;
+	bool lastMid = false;
 };

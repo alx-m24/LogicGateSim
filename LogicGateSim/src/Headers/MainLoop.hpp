@@ -6,9 +6,20 @@
 
 class Loop {
 private:
+	bool addWire = false, lastAdd = false;
+	bool left = false;
+	bool right = false;
+	bool mid = false;
+	sf::Texture addWireTex;
+	sf::Sprite addWireSprite;
+	sf::Vector2f mousePos;
+
+	void Connect();
+	void updateObjs();
+	void updateNodes();
 public:
 	// contruct
-	Loop() = default;
+	Loop();
 
 	void Input();
 	void Update();

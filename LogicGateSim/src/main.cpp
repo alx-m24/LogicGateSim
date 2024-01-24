@@ -8,10 +8,12 @@
 #include "Headers/Object.hpp"
 #include "Headers/Gates.hpp"
 #include "Headers/Node.hpp"
+#include "Headers/Wire.hpp"
 
 sf::RenderWindow* window;
 std::vector<Object*> objects;
 std::vector<Node*> nodes;
+std::vector<Wire*> wires;
 
 int main() {
 	// window settings
@@ -28,13 +30,19 @@ int main() {
 
 	srand(time(0));
 
+	// Gates
 	NotGate notgate(sf::Vector2f(400, 300));
 	objects.push_back(&notgate);
 	AndGate andGate(sf::Vector2f(200, 300));
 	objects.push_back(&andGate);
-
+	NotGate notGate2(sf::Vector2f(600, 300));
+	objects.push_back(&notGate2);
+	
+	// Nodes
 	Node testNode(sf::Vector2f(25, 300), Node::Input);
 	nodes.push_back(&testNode);
+	Node testNode2(sf::Vector2f(500, 300), Node::Input);
+	nodes.push_back(&testNode2);
 
 	sf::Font arial;
 	arial.loadFromFile("C:/Windows/Fonts/arial.ttf");
@@ -69,7 +77,5 @@ int main() {
 
 		++Frame;
 	}
-
 	return EXIT_SUCCESS;
-
 }
