@@ -7,9 +7,11 @@
 #include "Headers/Common.hpp"
 #include "Headers/Object.hpp"
 #include "Headers/Gates.hpp"
+#include "Headers/Node.hpp"
 
 sf::RenderWindow* window;
 std::vector<Object*> objects;
+std::vector<Node*> nodes;
 
 int main() {
 	// window settings
@@ -31,9 +33,30 @@ int main() {
 	AndGate andGate(sf::Vector2f(200, 300));
 	objects.push_back(&andGate);
 
+	Node testNode(sf::Vector2f(25, 300), Node::Input);
+	nodes.push_back(&testNode);
+
+	sf::Font arial;
+	arial.loadFromFile("C:/Windows/Fonts/arial.ttf");
+	sf::Text fpsText;
+	fpsText.setFont(arial);
+	fpsText.setFillColor(sf::Color::Red);
+	fpsText.setCharacterSize(24);
+
+	sf::Clock FPSclock;
+	unsigned int FPS = 0, Frame = 0;
 	// main loop
 	while (Mainwindow.isOpen())
 	{
+		if (FPSclock.getElapsedTime().asSeconds() >= 1.f)
+		{
+			FPS = Frame;
+			Frame = 0;
+			FPSclock.restart();
+
+			fpsText.setString("FPS: " + std::to_string(FPS));
+		}
+
 		// processing inputs(pointer to snake object)
 		loop.Input();
 
@@ -41,7 +64,10 @@ int main() {
 		loop.Update();
 
 		// rendering all objects
+		window->draw(fpsText);
 		loop.Render();
+
+		++Frame;
 	}
 
 	return EXIT_SUCCESS;

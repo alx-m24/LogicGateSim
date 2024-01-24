@@ -37,6 +37,23 @@ void Loop::Input() {
 			if (obj->getGlobalBounds().contains(mousePos)) obj->setPosition(mousePos);
 		}
 	}
+	for (Node* n : nodes)
+	{
+		sf::Vector2f mousePos = sf::Vector2f(sf::Mouse::getPosition(*window));
+		bool hover = n->getGlobalBounds().contains(mousePos);
+		bool left = sf::Mouse::isButtonPressed(sf::Mouse::Left);
+		bool right = sf::Mouse::isButtonPressed(sf::Mouse::Right);
+
+		if (hover) {
+			if (left) {
+				n->setPosition(mousePos);
+			}
+			if (right && !n->lastRight && n->type == Node::Input) {
+				n->state = !n->state;
+			}
+		}
+		n->lastRight = right;
+	}
 }
 
 void Loop::Update()
@@ -46,6 +63,10 @@ void Loop::Update()
 	{
 		obj->updateObj();
 	}
+	for (Node* n : nodes)
+	{
+		n->updateNode();
+	}
 }
 
 void Loop::Render()
@@ -53,6 +74,10 @@ void Loop::Render()
 	for (Object* obj : objects)
 	{
 		window->draw(*obj);
+	}
+	for (Node* n : nodes)
+	{
+		window->draw(*n);
 	}
 	window->display();
 }
