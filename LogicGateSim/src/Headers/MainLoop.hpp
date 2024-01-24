@@ -13,8 +13,8 @@ private:
 	sf::Texture addWireTex;
 	sf::Sprite addWireSprite;
 	sf::Vector2f mousePos;
-
-	void Connect();
+	
+	void loadWireTextures();
 	void updateObjs();
 	void updateNodes();
 public:

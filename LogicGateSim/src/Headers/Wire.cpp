@@ -1,5 +1,4 @@
 #include "Wire.hpp"
-#include <iostream>
 
 Wire::Wire()
 {
@@ -7,7 +6,19 @@ Wire::Wire()
 	this->resize(2);
 }
 
-void Wire::updateWire()
+void Wire::changeColor()
+{
+	if (state) {
+		(*this)[0].color = sf::Color::Red;
+		(*this)[1].color = sf::Color::Red;
+	}
+	else {
+		(*this)[0].color = sf::Color::White;
+		(*this)[1].color = sf::Color::White;
+	}
+}
+
+void Wire::logic()
 {
 	if (inputObj != nullptr) {
 		(*this)[0].position = inputObj->getPosition();
@@ -25,13 +36,10 @@ void Wire::updateWire()
 		(*this)[1].position = outputNode->getPosition();
 		outputNode->state = this->state;
 	}
+}
 
-	if (state) {
-		(*this)[0].color = sf::Color::Red;
-		(*this)[1].color = sf::Color::Red;
-	}
-	else {
-		(*this)[0].color = sf::Color::White;
-		(*this)[1].color = sf::Color::White;
-	}
+void Wire::updateWire()
+{
+	logic();
+	changeColor();
 }

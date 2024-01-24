@@ -3,6 +3,11 @@
 
 Loop::Loop()
 {
+	loadWireTextures();
+}
+
+void Loop::loadWireTextures()
+{
 	addWireTex.loadFromFile("C:\\Users\\alexa\\Coding\\C++\\LogicGateSim\\LogicGateSim\\Resources\\AddWire.png");
 	addWireTex.generateMipmap();
 	addWireTex.setSmooth(true);
@@ -11,11 +16,6 @@ Loop::Loop()
 	addWireSprite.setOrigin(sf::Vector2f(addWireTex.getSize()) / 2.0f);
 	addWireSprite.setScale(0.2f, 0.2f);
 	addWireSprite.setPosition(window->getSize().x / 2.0f, window->getSize().y * 2 / 3);
-}
-
-void Loop::Connect()
-{
-	
 }
 
 void Loop::updateObjs()
@@ -122,8 +122,6 @@ void Loop::Input() {
 
 	updateObjs();
 	updateNodes();
-
-	Connect();
 
 	lastAdd = addWire;
 }
