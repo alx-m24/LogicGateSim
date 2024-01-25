@@ -41,7 +41,7 @@ int main() {
 	nodes.push_back(&testNode);
 	Node testNode2(sf::Vector2f(500, 300), Node::Input);
 	nodes.push_back(&testNode2);
-	Node testNode3(sf::Vector2f(700, 300), Node::Input);
+	Node testNode3(sf::Vector2f(700, 300), Node::Output);
 	nodes.push_back(&testNode3);
 
 	sf::Font arial;

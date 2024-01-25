@@ -1,5 +1,4 @@
 #include "MainLoop.hpp"
-#include <iostream>
 
 Loop::Loop()
 {
@@ -63,14 +62,22 @@ void Loop::updateNodes()
 			if (mid && !n->lastMid) {
 				if (addWire) {
 					Wire* w = wires[wires.size() - 1];
-					w->outputNode = n;
+					if (n->type == Node::Output) w->outputNode = n;
+					else {
+						auto it = std::find(wires.begin(), wires.end(), w);
+						if (it != wires.end()) wires.erase(it);
+						delete w;
+					}
 				}
 				else {
-					Wire* w = new Wire;
-					(*w)[0].position = n->getPosition();
-					(*w)[1].position = n->getPosition();
-					w->inputNode = n;
-					wires.push_back(w);
+					if (n->type == Node::Input) {
+						Wire* w = new Wire;
+						(*w)[0].position = n->getPosition();
+						(*w)[1].position = n->getPosition();
+						w->inputNode = n;
+						wires.push_back(w);
+					}
+					else addWire = true;
 				}
 				addWire = !addWire;
 			}
@@ -139,6 +146,7 @@ void Loop::Update()
 		if (hover && mid && !w->lastMid) {
 			auto it = std::find(wires.begin(), wires.end(), w);
 			if (it != wires.end()) wires.erase(it);
+			delete w;
 		}
 		else {
 			w->updateWire();
