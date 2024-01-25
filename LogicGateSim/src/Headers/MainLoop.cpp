@@ -33,6 +33,7 @@ void Loop::updateObjs()
 				}
 				else {
 					Wire* w = new Wire;
+					(*w)[0].position = obj->getPosition();
 					(*w)[1].position = obj->getPosition();
 					w->inputObj = obj;
 					wires.push_back(w);
@@ -66,6 +67,7 @@ void Loop::updateNodes()
 				}
 				else {
 					Wire* w = new Wire;
+					(*w)[0].position = n->getPosition();
 					(*w)[1].position = n->getPosition();
 					w->inputNode = n;
 					wires.push_back(w);
@@ -130,7 +132,15 @@ void Loop::Update()
 {
 	window->clear(sf::Color::Black);
 
-	for (Wire* w : wires) w->updateWire();
+	for (Wire* w : wires) {
+		bool hover = w->getBounds().contains(mousePos);
+
+		if (hover && sf::Mouse::isButtonPressed(sf::Mouse::Middle)) {
+			auto it = std::find(wires.begin(), wires.end(), w);
+			if (it != wires.end()) wires.erase(it);
+		}
+		else w->updateWire();
+	}
 	for (Object* obj : objects) obj->updateObj();
 	for (Node* n : nodes) n->updateNode();
 }
