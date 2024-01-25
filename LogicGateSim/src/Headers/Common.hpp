@@ -6,6 +6,7 @@
 #include "Wire.hpp"
 
 extern sf::RenderWindow* window;
+extern sf::Font arial;
 extern std::vector<Object*> objects;
 extern std::vector<Node*> nodes;
 extern std::vector<Wire*> wires;

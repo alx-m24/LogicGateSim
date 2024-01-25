@@ -2,6 +2,8 @@
 
 Loop::Loop()
 {
+	menu = new Menu;
+
 	loadWireTextures();
 }
 
@@ -24,7 +26,11 @@ void Loop::updateObjs()
 		bool hover = obj->getGlobalBounds().contains(mousePos);
 		if (hover)
 		{
-			if (left) obj->setPosition(mousePos);
+			if (left) {
+				obj->setPosition(mousePos);
+				obj->setColor(sf::Color(167, 167, 167));
+			}
+			else obj->setColor(sf::Color::White);
 			if (mid && !obj->lastMid) {
 				if (addWire) {
 					Wire* w = wires[wires.size() - 1];
@@ -53,7 +59,6 @@ void Loop::updateNodes()
 		if (hover) {
 			if (left) {
 				n->setPosition(mousePos);
-				addWire = false;
 			}
 			if (right && !n->lastRight && n->type == Node::Input) {
 				n->state = !n->state;
@@ -107,6 +112,7 @@ void Loop::Input() {
 		}
 		case sf::Event::MouseButtonPressed: {
 			if (event.mouseButton.button != sf::Mouse::Middle) addWire = false;
+			if (event.mouseButton.button != sf::Mouse::Left) menu->isAdding = false;
 			break;
 		}
 		case sf::Event::KeyPressed: {
@@ -155,6 +161,8 @@ void Loop::Update()
 	}
 	for (Object* obj : objects) obj->updateObj();
 	for (Node* n : nodes) n->updateNode();
+
+	menu->updateMenu();
 }
 
 void Loop::Render()
@@ -163,6 +171,8 @@ void Loop::Render()
 	for (Object* obj : objects) window->draw(*obj);
 	for (Node* n : nodes) window->draw(*n);
 	if (addWire) window->draw(addWireSprite);
+
+	menu->display();
 
 	window->display();
 }

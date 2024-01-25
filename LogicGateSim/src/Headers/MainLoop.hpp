@@ -3,6 +3,7 @@
 #include "Object.hpp"
 #include "Node.hpp"
 #include "Common.hpp"
+#include "Menu.hpp"
 
 class Loop {
 private:
@@ -13,6 +14,7 @@ private:
 	sf::Texture addWireTex;
 	sf::Sprite addWireSprite;
 	sf::Vector2f mousePos;
+	Menu* menu;
 	
 	void loadWireTextures();
 	void updateObjs();

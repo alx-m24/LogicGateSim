@@ -11,6 +11,7 @@
 #include "Headers/Wire.hpp"
 
 sf::RenderWindow* window;
+sf::Font arial;
 std::vector<Object*> objects;
 std::vector<Node*> nodes;
 std::vector<Wire*> wires;
@@ -44,7 +45,6 @@ int main() {
 	Node testNode3(sf::Vector2f(700, 300), Node::Output);
 	nodes.push_back(&testNode3);
 
-	sf::Font arial;
 	arial.loadFromFile("C:/Windows/Fonts/arial.ttf");
 	sf::Text fpsText;
 	fpsText.setFont(arial);
