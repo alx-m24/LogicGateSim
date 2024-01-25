@@ -18,4 +18,5 @@ public:
 	Node* outputNode = nullptr;
 
 	bool state = false;
+	bool lastMid = false;
 };

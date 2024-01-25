@@ -134,12 +134,16 @@ void Loop::Update()
 
 	for (Wire* w : wires) {
 		bool hover = w->getBounds().contains(mousePos);
+		bool mid = sf::Mouse::isButtonPressed(sf::Mouse::Middle);
 
-		if (hover && sf::Mouse::isButtonPressed(sf::Mouse::Middle)) {
+		if (hover && mid && !w->lastMid) {
 			auto it = std::find(wires.begin(), wires.end(), w);
 			if (it != wires.end()) wires.erase(it);
 		}
-		else w->updateWire();
+		else {
+			w->updateWire();
+			w->lastMid = mid;
+		}
 	}
 	for (Object* obj : objects) obj->updateObj();
 	for (Node* n : nodes) n->updateNode();
