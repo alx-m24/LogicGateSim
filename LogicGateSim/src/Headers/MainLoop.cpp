@@ -28,20 +28,35 @@ void Loop::updateObjs()
 		{
 			if (left) {
 				obj->setPosition(mousePos);
+				moveConnectors(obj);
 				obj->setColor(sf::Color(167, 167, 167));
 			}
 			else obj->setColor(sf::Color::White);
 			if (mid && !obj->lastMid) {
 				if (addWire) {
-					Wire* w = wires[wires.size() - 1];
-					w->outputObj = obj;
+					for (int i = 0; i < obj->Inconnectors.size(); ++i)
+					{
+						if (obj->Inconnectors[i]->getGlobalBounds().contains(mousePos))
+						{
+							Wire* w = wires[wires.size() - 1];
+							w->outputObj = obj;
+							w->inputIndex = i;
+						}
+					}
 				}
 				else {
-					Wire* w = new Wire;
-					(*w)[0].position = obj->getPosition();
-					(*w)[1].position = obj->getPosition();
-					w->inputObj = obj;
-					wires.push_back(w);
+					for (int i = 0; i < obj->Outconnectors.size(); ++i)
+					{
+						if (obj->Outconnectors[i]->getGlobalBounds().contains(mousePos))
+						{
+							Wire* w = new Wire;
+							(*w)[0].position = obj->Outconnectors[i]->getPosition();
+							(*w)[1].position = obj->Outconnectors[i]->getPosition();
+							w->inputObj = obj;
+							w->outputIndex = i;
+							wires.push_back(w);
+						}
+					}
 				}
 				addWire = !addWire;
 			}
@@ -90,6 +105,31 @@ void Loop::updateNodes()
 
 		n->lastMid = mid;
 		n->lastRight = right;
+	}
+}
+
+void Loop::moveConnectors(Object* obj)
+{
+	int InputNum = obj->inputs.size(), OutputNum = obj->outputs.size();
+	float objSizeX = obj->getTexture()->getSize().x * obj->getScale().x;
+
+	if (InputNum <= 1) obj->Inconnectors[0]->setPosition(sf::Vector2f(mousePos.x - (objSizeX * 0.46f), mousePos.y));
+	else {
+		float initialY = mousePos.y - (InputNum * 10);
+		for (int i = 0; i < InputNum; ++i)
+		{
+			sf::Vector2f newPos = sf::Vector2f(mousePos.x - (objSizeX * 0.46), initialY + (i * InputNum * 20));
+			obj->Inconnectors[i]->setPosition(newPos);
+		}
+	}
+	if (OutputNum <= 1) obj->Outconnectors[0]->setPosition(sf::Vector2f(mousePos.x + (objSizeX * 0.46f), mousePos.y));
+	else {
+		float initialY = mousePos.y - (OutputNum * 10);
+		for (int i = 0; i < OutputNum; ++i)
+		{
+			sf::Vector2f newPos = sf::Vector2f(mousePos.x + (objSizeX * 0.46f), initialY + (i * InputNum * 20));
+			obj->Outconnectors[i]->setPosition(newPos);
+		}
 	}
 }
 
@@ -168,7 +208,11 @@ void Loop::Update()
 void Loop::Render()
 {
 	for (Wire* w : wires) window->draw(*w);
-	for (Object* obj : objects) window->draw(*obj);
+	for (Object* obj : objects) {
+		window->draw(*obj);
+		for (Connector* c : obj->Inconnectors) window->draw(*c);
+		for (Connector* c : obj->Outconnectors) window->draw(*c);
+	}
 	for (Node* n : nodes) window->draw(*n);
 	if (addWire) window->draw(addWireSprite);
 

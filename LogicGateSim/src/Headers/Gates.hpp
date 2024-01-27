@@ -15,3 +15,10 @@ public:
 
 	void logic();
 };
+
+class OrGate : public Object {
+public:
+	OrGate(sf::Vector2f pos) : Object("C:\\Users\\alexa\\Coding\\C++\\LogicGateSim\\LogicGateSim\\Resources\\OR.png", pos, 2, 1) {};
+
+	void logic();
+};

@@ -19,7 +19,7 @@ std::vector<Wire*> wires;
 int main() {
 	// window settings
 	sf::ContextSettings settings;
-	settings.antialiasingLevel = 4;
+	settings.antialiasingLevel = 8;
 
 	// creating window
 	sf::RenderWindow Mainwindow(sf::VideoMode(800, 600), "Logic Gate Sim", sf::Style::Default, settings);
@@ -34,16 +34,20 @@ int main() {
 	objects.push_back(&notgate);
 	AndGate andGate(sf::Vector2f(200, 300));
 	objects.push_back(&andGate);
-	NotGate notGate2(sf::Vector2f(600, 300));
-	objects.push_back(&notGate2);
+	OrGate OrGate(sf::Vector2f(600, 300));
+	objects.push_back(&OrGate);
 	
 	// Nodes
 	Node testNode(sf::Vector2f(25, 300), Node::Input);
 	nodes.push_back(&testNode);
 	Node testNode2(sf::Vector2f(500, 300), Node::Input);
 	nodes.push_back(&testNode2);
-	Node testNode3(sf::Vector2f(700, 300), Node::Output);
+	Node testNode3(sf::Vector2f(500, 100), Node::Input);
 	nodes.push_back(&testNode3);
+	Node testNode4(sf::Vector2f(500, 600), Node::Input);
+	nodes.push_back(&testNode4);
+	Node testNode5(sf::Vector2f(700, 300), Node::Output);
+	nodes.push_back(&testNode5);
 
 	arial.loadFromFile("C:/Windows/Fonts/arial.ttf");
 	sf::Text fpsText;

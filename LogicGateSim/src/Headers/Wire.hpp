@@ -19,4 +19,7 @@ public:
 
 	bool state = false;
 	bool lastMid = false;
+
+	int inputIndex;
+	int outputIndex;
 };

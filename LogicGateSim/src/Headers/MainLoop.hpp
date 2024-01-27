@@ -19,6 +19,7 @@ private:
 	void loadWireTextures();
 	void updateObjs();
 	void updateNodes();
+	void moveConnectors(Object* obj);
 public:
 	// contruct
 	Loop();

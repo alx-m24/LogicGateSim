@@ -9,3 +9,8 @@ void AndGate::logic()
 {
 	outputs[0] = inputs[0] && inputs[1];
 }
+
+void OrGate::logic()
+{
+	outputs[0] = inputs[0] || inputs[1];
+}

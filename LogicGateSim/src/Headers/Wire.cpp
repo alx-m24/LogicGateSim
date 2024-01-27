@@ -21,16 +21,16 @@ void Wire::changeColor()
 void Wire::logic()
 {
 	if (inputObj != nullptr) {
-		(*this)[0].position = inputObj->getPosition();
-		this->state = inputObj->outputs[0];
+		(*this)[0].position = inputObj->Outconnectors[outputIndex]->getPosition();
+		this->state = inputObj->outputs[outputIndex];
 	}
 	if (inputNode != nullptr) {
 		(*this)[0].position = inputNode->getPosition();
 		this->state = inputNode->state;
 	}
 	if (outputObj != nullptr) {
-		(*this)[1].position = outputObj->getPosition();
-		outputObj->inputs[0] = this->state;
+		(*this)[1].position = outputObj->Inconnectors[inputIndex]->getPosition();
+		outputObj->inputs[inputIndex] = this->state;
 	}
 	if (outputNode != nullptr) {
 		(*this)[1].position = outputNode->getPosition();
