@@ -15,6 +15,12 @@ sf::Font arial;
 std::vector<Object*> objects;
 std::vector<Node*> nodes;
 std::vector<Wire*> wires;
+bool left;
+bool lastleft;
+bool right;
+bool lastright;
+bool middle;
+bool lastmiddle;
 
 int main() {
 	// window settings
@@ -30,24 +36,25 @@ int main() {
 	Loop loop;
 
 	// Gates
-	NotGate notgate(sf::Vector2f(400, 300));
-	objects.push_back(&notgate);
-	AndGate andGate(sf::Vector2f(200, 300));
-	objects.push_back(&andGate);
-	OrGate OrGate(sf::Vector2f(600, 300));
-	objects.push_back(&OrGate);
+	//NotGate notgate(sf::Vector2f(400, 300));
+	//objects.push_back(&notgate);
+	//AndGate andGate(sf::Vector2f(200, 300));
+	//objects.push_back(&andGate);
+	//OrGate OrGate(sf::Vector2f(600, 300));
+	//objects.push_back(&OrGate);
 	
 	// Nodes
-	Node testNode(sf::Vector2f(25, 300), Node::Input);
-	nodes.push_back(&testNode);
-	Node testNode2(sf::Vector2f(500, 300), Node::Input);
-	nodes.push_back(&testNode2);
-	Node testNode3(sf::Vector2f(500, 100), Node::Input);
-	nodes.push_back(&testNode3);
-	Node testNode4(sf::Vector2f(500, 600), Node::Input);
-	nodes.push_back(&testNode4);
-	Node testNode5(sf::Vector2f(700, 300), Node::Output);
-	nodes.push_back(&testNode5);
+	//Node testNode(sf::Vector2f(25, 300), Node::Input);
+	//nodes.push_back(&testNode);
+	//Node testNode2(sf::Vector2f(500, 300), Node::Input);
+	//nodes.push_back(&testNode2);
+	//Node testNode3(sf::Vector2f(500, 100), Node::Input);
+	//nodes.push_back(&testNode3);
+	//Node testNode4(sf::Vector2f(500, 500), Node::Output);
+	//nodes.push_back(&testNode4);
+	
+	//TestGate testgate(sf::Vector2f(700, 300));
+	//objects.push_back(&testgate);
 
 	arial.loadFromFile("C:/Windows/Fonts/arial.ttf");
 	sf::Text fpsText;

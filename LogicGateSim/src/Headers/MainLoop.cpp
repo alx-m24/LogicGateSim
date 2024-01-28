@@ -32,7 +32,7 @@ void Loop::updateObjs()
 				obj->setColor(sf::Color(167, 167, 167));
 			}
 			else obj->setColor(sf::Color::White);
-			if (mid && !obj->lastMid) {
+			if (middle && !obj->lastMid) {
 				if (addWire) {
 					for (int i = 0; i < obj->Inconnectors.size(); ++i)
 					{
@@ -61,7 +61,7 @@ void Loop::updateObjs()
 				addWire = !addWire;
 			}
 		}
-		obj->lastMid = mid;
+		obj->lastMid = middle;
 	}
 }
 
@@ -79,7 +79,7 @@ void Loop::updateNodes()
 				n->state = !n->state;
 				addWire = false;
 			}
-			if (mid && !n->lastMid) {
+			if (middle && !n->lastMid) {
 				if (addWire) {
 					Wire* w = wires[wires.size() - 1];
 					if (n->type == Node::Output) w->outputNode = n;
@@ -103,7 +103,7 @@ void Loop::updateNodes()
 			}
 		}
 
-		n->lastMid = mid;
+		n->lastMid = middle;
 		n->lastRight = right;
 	}
 }
@@ -152,7 +152,6 @@ void Loop::Input() {
 		}
 		case sf::Event::MouseButtonPressed: {
 			if (event.mouseButton.button != sf::Mouse::Middle) addWire = false;
-			if (event.mouseButton.button != sf::Mouse::Left) menu->isAdding = false;
 			break;
 		}
 		case sf::Event::KeyPressed: {
@@ -173,7 +172,7 @@ void Loop::Input() {
 
 	left = sf::Mouse::isButtonPressed(sf::Mouse::Left);
 	right = sf::Mouse::isButtonPressed(sf::Mouse::Right);
-	mid = sf::Mouse::isButtonPressed(sf::Mouse::Middle);
+	middle = sf::Mouse::isButtonPressed(sf::Mouse::Middle);
 
 	updateObjs();
 	updateNodes();
@@ -207,6 +206,7 @@ void Loop::Update()
 
 void Loop::Render()
 {
+	menu->display();
 	for (Wire* w : wires) window->draw(*w);
 	for (Object* obj : objects) {
 		window->draw(*obj);
@@ -216,7 +216,8 @@ void Loop::Render()
 	for (Node* n : nodes) window->draw(*n);
 	if (addWire) window->draw(addWireSprite);
 
-	menu->display();
-
 	window->display();
+
+	lastleft = left;
+	lastright = right;
 }

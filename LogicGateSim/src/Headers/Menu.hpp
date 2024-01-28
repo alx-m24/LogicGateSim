@@ -1,6 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include "Gates.hpp"
 #include "Common.hpp"
 #include "Node.hpp"
 
@@ -8,8 +9,7 @@ class Menu {
 private:
 	sf::Sprite addItem;
 	sf::Texture addItemTex;
-
-	bool lastleft = false;
+	sf::Vector2f thisSize;
 
 	void resetAddItemPos();
 	void displayAddMenu();

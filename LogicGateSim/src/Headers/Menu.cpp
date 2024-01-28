@@ -4,18 +4,18 @@ Menu::Menu()
 {
 	sf::Vector2u winSize = window->getSize();
 
-	addItemTex.loadFromFile("C:\\Users\\alexa\\Coding\\C++\\LogicGateSim\\LogicGateSim\\Resources\\AddItem.png");
-	addItemTex.setSmooth(true);
+addItemTex.loadFromFile("C:\\Users\\alexa\\Coding\\C++\\LogicGateSim\\LogicGateSim\\Resources\\AddItem.png");
+addItemTex.setSmooth(true);
 
-	sf::Vector2f texSize = sf::Vector2f(addItemTex.getSize());
+sf::Vector2f texSize = sf::Vector2f(addItemTex.getSize());
 
-	addItem.setTexture(addItemTex);
-	addItem.setOrigin(texSize / 2.0f);
-	addItem.scale(0.25f, 0.25f);
-	
-	sf::Vector2f thisScale = addItem.getScale();
-	sf::Vector2f thisSize = { texSize.x * thisScale.x, texSize.y * thisScale.y };
-	addItem.setPosition(winSize.x - (thisSize.x / 2), winSize.y - (thisSize.y / 2));
+addItem.setTexture(addItemTex);
+addItem.setOrigin(texSize / 2.0f);
+addItem.scale(0.25f, 0.25f);
+
+sf::Vector2f thisScale = addItem.getScale();
+thisSize = { texSize.x * thisScale.x, texSize.y * thisScale.y };
+addItem.setPosition(winSize.x - (thisSize.x / 2), winSize.y - (thisSize.y / 2));
 }
 
 void Menu::resetAddItemPos()
@@ -24,13 +24,141 @@ void Menu::resetAddItemPos()
 	sf::Vector2f texSize = sf::Vector2f(addItemTex.getSize());
 	sf::Vector2u winSize = window->getSize();
 
-	sf::Vector2f thisSize = { texSize.x * thisScale.x, texSize.y * thisScale.y };
+	thisSize = { texSize.x * thisScale.x, texSize.y * thisScale.y };
 	addItem.setPosition(winSize.x - (thisSize.x / 2), thisSize.y / 2);
 }
 
 void Menu::displayAddMenu()
 {
-	std::cout << "Add" << std::endl;
+	sf::RectangleShape Bg;
+	Bg.setSize(sf::Vector2f(400, 400));
+	Bg.setOrigin(400, 0);
+	Bg.setFillColor(sf::Color(7, 11, 43, 255));
+	const sf::Vector2f bgPos = { this->addItem.getPosition().x + (thisSize.x / 2), this->addItem.getPosition().y - (thisSize.y / 2) };
+	Bg.setPosition(bgPos);
+
+	const sf::Vector2f mousePos = sf::Vector2f(sf::Mouse::getPosition(*window));
+
+	if (!Bg.getGlobalBounds().contains(mousePos)) {
+		isAdding = false;
+		return;
+	}
+
+	sf::CircleShape inNode;
+	inNode.setRadius(25);
+	inNode.setOrigin(25, 25);
+	inNode.setPosition(bgPos + sf::Vector2f(-100, 30));
+	inNode.setFillColor(sf::Color::White);
+
+	sf::Text nodeText;
+	nodeText.setFont(arial);
+	nodeText.setCharacterSize(30);
+	nodeText.setPosition(inNode.getPosition() + sf::Vector2f(-75, 25));
+	nodeText.setFillColor(sf::Color::Red);
+	nodeText.setString("Input Node");
+
+
+	sf::CircleShape outNode;
+	outNode.setRadius(25);
+	outNode.setOrigin(25, 25);
+	outNode.setPosition(bgPos + sf::Vector2f(-285, 30));
+	outNode.setFillColor(sf::Color::White);
+
+	sf::Text outnodeText;
+	outnodeText.setFont(arial);
+	outnodeText.setCharacterSize(30);
+	outnodeText.setPosition(outNode.getPosition() + sf::Vector2f(-80, 25));
+	outnodeText.setFillColor(sf::Color::Red);
+	outnodeText.setString("Output Node");
+
+
+	sf::RectangleShape andGate(sf::Vector2f(100, 50));
+	AndGate* temp = new AndGate(sf::Vector2f(0, 0));
+
+	andGate.setTexture(temp->getTexture());
+	andGate.setOrigin(50, 25);
+	andGate.setPosition(bgPos + sf::Vector2f(-100, 150));
+
+	sf::Text andGateText;
+	andGateText.setFont(arial);
+	andGateText.setCharacterSize(30);
+	andGateText.setPosition(andGate.getPosition() + sf::Vector2f(-60, 25));
+	andGateText.setFillColor(sf::Color::Red);
+	andGateText.setString("And Gate");
+
+	sf::RectangleShape orgate(sf::Vector2f(100, 50));
+	OrGate* tempOr = new OrGate(sf::Vector2f(0, 0));
+
+	orgate.setTexture(tempOr->getTexture());
+	orgate.setOrigin(50, 25);
+	orgate.setPosition(bgPos + sf::Vector2f(-300, 150));
+
+	sf::Text orGateText;
+	orGateText.setFont(arial);
+	orGateText.setCharacterSize(30);
+	orGateText.setPosition(orgate.getPosition() + sf::Vector2f(-60, 25));
+	orGateText.setFillColor(sf::Color::Red);
+	orGateText.setString("Or Gate");
+
+	sf::RectangleShape notGate(sf::Vector2f(100, 50));
+	NotGate* tempnot = new NotGate(sf::Vector2f(0, 0));
+
+	notGate.setTexture(tempnot->getTexture());
+	notGate.setOrigin(50, 25);
+	notGate.setPosition(bgPos + sf::Vector2f(-300, 275));
+
+	sf::Text notGateText;
+	notGateText.setFont(arial);
+	notGateText.setCharacterSize(30);
+	notGateText.setPosition(notGate.getPosition() + sf::Vector2f(-60, 25));
+	notGateText.setFillColor(sf::Color::Red);
+	notGateText.setString("Not Gate");
+
+	if (left && !lastleft)
+	{
+		if (inNode.getGlobalBounds().contains(mousePos))
+		{
+			nodes.push_back(new Node(mousePos, Node::Input));
+			goto end;
+		}
+		if (outNode.getGlobalBounds().contains(mousePos))
+		{
+			nodes.push_back(new Node(mousePos, Node::Output));
+			goto end;
+		}
+		if (andGate.getGlobalBounds().contains(mousePos))
+		{
+			objects.push_back(new AndGate(mousePos));
+			goto end;
+		}
+		if (orgate.getGlobalBounds().contains(mousePos))
+		{
+			objects.push_back(new OrGate(mousePos));
+			goto end;
+		}
+		if (notGate.getGlobalBounds().contains(mousePos))
+		{
+			objects.push_back(new NotGate(mousePos));
+			goto end;
+		}
+	}
+
+end:
+	window->draw(Bg);
+	window->draw(inNode);
+	window->draw(nodeText);
+	window->draw(outNode);
+	window->draw(outnodeText);
+	window->draw(andGate);
+	window->draw(andGateText);
+	window->draw(orgate);
+	window->draw(orGateText);
+	window->draw(notGate);
+	window->draw(notGateText);
+
+	delete temp;
+	delete tempOr;
+	delete tempnot;
 }
 
 void Menu::updateMenu()
@@ -39,20 +167,16 @@ void Menu::updateMenu()
 
 	sf::Vector2f mousePos = sf::Vector2f(sf::Mouse::getPosition(*window));
 	bool hover = addItem.getGlobalBounds().contains(mousePos);
-	bool left = sf::Mouse::isButtonPressed(sf::Mouse::Left);
 	
-	if (left && !lastleft) {
+	if (!left && lastleft) {
 		if (hover) {
-			isAdding = !isAdding;
-			addItem.setColor(sf::Color(126, 127, 145));
+			isAdding = true;
+			addItem.setColor(sf::Color::White);
 		}
-		else isAdding = false;
 	}
 	else {
-		if (!left && lastleft) addItem.setColor(sf::Color::White);
+		if (left && hover) addItem.setColor(sf::Color(126, 127, 145, 255));
 	}
-
-	lastleft = left;
 }
 
 void Menu::display()

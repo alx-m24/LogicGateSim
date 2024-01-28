@@ -8,9 +8,6 @@
 class Loop {
 private:
 	bool addWire = false, lastAdd = false;
-	bool left = false;
-	bool right = false;
-	bool mid = false;
 	sf::Texture addWireTex;
 	sf::Sprite addWireSprite;
 	sf::Vector2f mousePos;

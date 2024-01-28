@@ -22,3 +22,10 @@ public:
 
 	void logic();
 };
+
+class TestGate : public Object {
+public:
+	TestGate(sf::Vector2f pos) : Object(" ", pos, 4, 1) {};
+
+	void logic();
+};

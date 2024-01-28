@@ -1,18 +1,8 @@
 #include "Object.hpp"
+#include <iostream>
 
-Object::Object(std::string pathToTex, sf::Vector2f pos, unsigned int InputNum, unsigned int OutputNum)
+void Object::ConnectorPos(int InputNum, int OutputNum, sf::Vector2f pos)
 {
-	tex.loadFromFile(pathToTex);
-	tex.generateMipmap();
-	tex.setSmooth(true);
-
-	this->setTexture(tex);
-	this->setPosition(pos);
-	this->setOrigin(sf::Vector2f(tex.getSize()) / 2.0f);
-	this->scale(0.2f, 0.2f);
-
-	inputs.resize(InputNum);
-	outputs.resize(OutputNum);
 	if (InputNum <= 1) Inconnectors.push_back(new Connector(sf::Vector2f(pos.x - ((this->getScale().x * tex.getSize().x) * 0.46f), pos.y)));
 	else {
 		float initialY = pos.y - (InputNum * 10);
@@ -31,6 +21,25 @@ Object::Object(std::string pathToTex, sf::Vector2f pos, unsigned int InputNum, u
 			Outconnectors.push_back(new Connector(newPos));
 		}
 	}
+}
+
+Object::Object(std::string pathToTex, sf::Vector2f pos, unsigned int InputNum, unsigned int OutputNum)
+{
+	pathToTex = (pathToTex != "" && pathToTex != " ") ? pathToTex : "C:\\Users\\alexa\\Coding\\C++\\LogicGateSim\\LogicGateSim\\Resources\\Custom.png";
+
+	tex.loadFromFile(pathToTex);
+	tex.generateMipmap();
+	tex.setSmooth(true);
+	this->setTexture(tex);
+	this->setPosition(pos);
+	this->setOrigin(sf::Vector2f(tex.getSize()) / 2.0f);
+	//float scale = std::max(InputNum, OutputNum) / 100.0f;
+	float scale = 0;
+	this->scale(0.2f + scale, 0.2f + scale);
+
+	inputs.resize(InputNum);
+	outputs.resize(OutputNum);
+	ConnectorPos(InputNum, OutputNum, pos);
 }
 
 void Object::updateObj()
