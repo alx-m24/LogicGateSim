@@ -1,6 +1,6 @@
 #include "MainLoop.hpp"
 
-Loop::Loop()
+Loop::Loop(Save* Saver) : save(Saver)
 {
 	menu = new Menu;
 
@@ -148,6 +148,7 @@ void Loop::Input() {
 			sf::View view(sf::FloatRect(0, 0, event.size.width, event.size.height));
 			window->setView(view);
 			addWireSprite.setPosition(window->getSize().x / 2.0f, window->getSize().y * 2 / 3);
+			menu->resetMenu();
 			break;
 		}
 		case sf::Event::MouseButtonPressed: {
@@ -159,6 +160,14 @@ void Loop::Input() {
 			{
 			case sf::Keyboard::Scancode::Escape: {
 				window->close();
+				break;
+			}
+			case sf::Keyboard::Scancode::S: {
+				save->save();
+				break;
+			}
+			case sf::Keyboard::Scancode::L: {
+				save->load();
 				break;
 			}
 			default:

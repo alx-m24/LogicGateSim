@@ -1,0 +1,1 @@
+{"num":2,"objects":[{"name":"andGate","posX":451,"posY":147},{"name":"orGate","posX":208,"posY":117}],"NodeNum":2,"nodes":[{"type":"output","posX":205,"posY":43},{"type":"input","posX":413,"posY":63}]}

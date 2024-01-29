@@ -11,7 +11,7 @@ class Object : public sf::Sprite{
 private:
 	void ConnectorPos(int InputNum, int OutputNum, sf::Vector2f pos);
 public:
-	Object(std::string pathToTex, sf::Vector2f pos, unsigned int InputNum, unsigned int OutputNum);
+	Object(std::string pathToTex, sf::Vector2f pos, unsigned int InputNum, unsigned int OutputNum, std::string Name);
 	void updateObj();
 	virtual void logic() {};
 
@@ -20,6 +20,7 @@ public:
 	std::vector<bool> outputs;
 	std::vector<Connector*> Inconnectors;
 	std::vector<Connector*> Outconnectors;
+	std::string name;
 
 	bool lastMid = false;
 };

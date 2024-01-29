@@ -9,6 +9,7 @@
 #include "Headers/Gates.hpp"
 #include "Headers/Node.hpp"
 #include "Headers/Wire.hpp"
+#include "Headers/Save.hpp"
 
 sf::RenderWindow* window;
 sf::Font arial;
@@ -22,7 +23,15 @@ bool lastright;
 bool middle;
 bool lastmiddle;
 
+void fps(sf::Text* fpsText) {
+	fpsText->setFont(arial);
+	fpsText->setFillColor(sf::Color::Red);
+	fpsText->setCharacterSize(24);
+}
+
 int main() {
+	Save save;
+
 	// window settings
 	sf::ContextSettings settings;
 	settings.antialiasingLevel = 8;
@@ -31,36 +40,16 @@ int main() {
 	sf::RenderWindow Mainwindow(sf::VideoMode(800, 600), "Logic Gate Sim", sf::Style::Default, settings);
 	Mainwindow.setPosition(Mainwindow.getPosition() - sf::Vector2i(0, 50));
 	Mainwindow.setVerticalSyncEnabled(true);
+	sf::Image icon;
+	icon.loadFromFile("C:\\Users\\alexa\\Coding\\C++\\LogicGateSim\\LogicGateSim\\Resources\\Icon.png");
+	Mainwindow.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
 	window = &Mainwindow;
 	// my main loop class
-	Loop loop;
-
-	// Gates
-	//NotGate notgate(sf::Vector2f(400, 300));
-	//objects.push_back(&notgate);
-	//AndGate andGate(sf::Vector2f(200, 300));
-	//objects.push_back(&andGate);
-	//OrGate OrGate(sf::Vector2f(600, 300));
-	//objects.push_back(&OrGate);
-	
-	// Nodes
-	//Node testNode(sf::Vector2f(25, 300), Node::Input);
-	//nodes.push_back(&testNode);
-	//Node testNode2(sf::Vector2f(500, 300), Node::Input);
-	//nodes.push_back(&testNode2);
-	//Node testNode3(sf::Vector2f(500, 100), Node::Input);
-	//nodes.push_back(&testNode3);
-	//Node testNode4(sf::Vector2f(500, 500), Node::Output);
-	//nodes.push_back(&testNode4);
-	
-	//TestGate testgate(sf::Vector2f(700, 300));
-	//objects.push_back(&testgate);
+	Loop loop(&save);
 
 	arial.loadFromFile("C:/Windows/Fonts/arial.ttf");
 	sf::Text fpsText;
-	fpsText.setFont(arial);
-	fpsText.setFillColor(sf::Color::Red);
-	fpsText.setCharacterSize(24);
+	fps(&fpsText);
 
 	sf::Clock FPSclock;
 	unsigned int FPS = 0, Frame = 0;

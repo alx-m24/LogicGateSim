@@ -4,6 +4,7 @@
 #include "Node.hpp"
 #include "Common.hpp"
 #include "Menu.hpp"
+#include "Save.hpp"
 
 class Loop {
 private:
@@ -12,6 +13,8 @@ private:
 	sf::Sprite addWireSprite;
 	sf::Vector2f mousePos;
 	Menu* menu;
+
+	Save* save;
 	
 	void loadWireTextures();
 	void updateObjs();
@@ -19,7 +22,7 @@ private:
 	void moveConnectors(Object* obj);
 public:
 	// contruct
-	Loop();
+	Loop(Save* Saver);
 
 	void Input();
 	void Update();
