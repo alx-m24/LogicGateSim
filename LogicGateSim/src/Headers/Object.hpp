@@ -23,4 +23,5 @@ public:
 	std::string name;
 
 	bool lastMid = false;
+	bool moving = false;
 };

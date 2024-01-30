@@ -40,9 +40,11 @@ int main() {
 	sf::RenderWindow Mainwindow(sf::VideoMode(800, 600), "Logic Gate Sim", sf::Style::Default, settings);
 	Mainwindow.setPosition(Mainwindow.getPosition() - sf::Vector2i(0, 50));
 	Mainwindow.setVerticalSyncEnabled(true);
+
 	sf::Image icon;
 	icon.loadFromFile("C:\\Users\\alexa\\Coding\\C++\\LogicGateSim\\LogicGateSim\\Resources\\Icon.png");
 	Mainwindow.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
+
 	window = &Mainwindow;
 	// my main loop class
 	Loop loop(&save);
@@ -52,7 +54,7 @@ int main() {
 	fps(&fpsText);
 
 	sf::Clock FPSclock;
-	unsigned int FPS = 0, Frame = 0;
+	uint8_t FPS = 0, Frame = 0;
 	// main loop
 	while (Mainwindow.isOpen())
 	{

@@ -25,14 +25,9 @@ void Loop::updateObjs()
 	for (Object* obj : objects)
 	{
 		bool hover = obj->getGlobalBounds().contains(mousePos);
-		if (hover)
-		{
-			if (left) {
-				obj->setPosition(mousePos);
-				moveConnectors(obj);
-				obj->setColor(sf::Color(167, 167, 167));
-			}
-			else obj->setColor(sf::Color::White);
+		if (hover) {
+			if (left && !moving) { obj->moving = true; moving = true; }
+
 			if (middle && !obj->lastMid) {
 				if (addWire) {
 					for (int i = 0; i < obj->Inconnectors.size(); ++i)
@@ -64,6 +59,16 @@ void Loop::updateObjs()
 				addWire = !addWire;
 			}
 		}
+		if (!left && lastleft && obj->moving) { obj->moving = false; moving = false; }
+		else {
+			if (obj->moving) {
+				obj->setPosition(mousePos);
+				moveConnectors(obj);
+				obj->setColor(sf::Color(167, 167, 167));
+			}
+			else obj->setColor(sf::Color::White);
+		}
+
 		obj->lastMid = middle;
 		++idx;
 	}
@@ -76,10 +81,8 @@ void Loop::updateNodes()
 	{
 		bool hover = n->getGlobalBounds().contains(mousePos);
 
-		if (hover) {
-			if (left) {
-				n->setPosition(mousePos);
-			}
+		if (!moving && hover) {
+			if (left) { moving = true; n->moving = true; }
 			if (right && !n->lastRight && n->type == Node::Input) {
 				n->state = !n->state;
 				addWire = false;
@@ -108,6 +111,10 @@ void Loop::updateNodes()
 				addWire = !addWire;
 			}
 		}
+	
+		if (!left && lastleft && n->moving) { n->moving = false; moving = false; }
+		else if (n->moving) n->setPosition(mousePos);
+
 
 		n->lastMid = middle;
 		n->lastRight = right;
@@ -200,6 +207,13 @@ void Loop::Update()
 {
 	window->clear(sf::Color::Black);
 
+	menu->updateMenu();
+	menu->display();
+
+	sf::Color curr;
+	int alpha = 255;
+	if (menu->isAdding) alpha = 100;
+
 	for (Wire* w : wires) {
 		bool hover = w->getBounds().contains(mousePos);
 		bool mid = sf::Mouse::isButtonPressed(sf::Mouse::Middle);
@@ -211,25 +225,56 @@ void Loop::Update()
 		}
 		else {
 			w->updateWire();
+
+			curr = (*w)[0].color;
+			(*w)[0].color = sf::Color(curr.r, curr.g, curr.b, alpha);
+			curr = (*w)[1].color;
+			(*w)[1].color = sf::Color(curr.r, curr.g, curr.b, alpha);
+
 			w->lastMid = mid;
+			window->draw(*w);
 		}
 	}
-	for (Object* obj : objects) obj->updateObj();
-	for (Node* n : nodes) n->updateNode();
+	for (Object* obj : objects) {
+		obj->updateObj();
 
-	menu->updateMenu();
+		curr = obj->getColor();
+		obj->setColor(sf::Color(curr.r, curr.g, curr.b, alpha));
+
+		window->draw(*obj);
+		for (Connector* c : obj->Inconnectors) {
+			curr = c->getFillColor();
+			c->setFillColor(sf::Color(curr.r, curr.g, curr.b, alpha));
+
+			window->draw(*c);
+		}
+		for (Connector* c : obj->Outconnectors) {
+			curr = c->getFillColor();
+			c->setFillColor(sf::Color(curr.r, curr.g, curr.b, alpha));
+
+			window->draw(*c);
+		}
+	}
+	for (Node* n : nodes) {
+		curr = n->getColor();
+		n->setColor(sf::Color(curr.r, curr.g, curr.b, alpha));
+
+		n->updateNode();
+
+		window->draw(*n);
+	}
 }
 
 void Loop::Render()
 {
-	menu->display();
+	/*
 	for (Wire* w : wires) window->draw(*w);
 	for (Object* obj : objects) {
 		window->draw(*obj);
 		for (Connector* c : obj->Inconnectors) window->draw(*c);
 		for (Connector* c : obj->Outconnectors) window->draw(*c);
 	}
-	for (Node* n : nodes) window->draw(*n);
+	for (Node* n : nodes) window->draw(*n);*/
 	if (addWire) window->draw(addWireSprite);
 
 	window->display();

@@ -10,13 +10,9 @@ private:
 	void logic();
 public:
 	Wire();
-	// In node to outnode
-	Wire(Node* InNode, Node* outNode);
-	Wire(Node* InNode, Object* outObj);
-	Wire(Object* Inobj, Node* outNode);
-	Wire(Object* Inobj, Object* outObj);
 
 	void updateWire();
+	void initialize();
 
 	Object* inputObj = nullptr;
 	Object* outputObj = nullptr;

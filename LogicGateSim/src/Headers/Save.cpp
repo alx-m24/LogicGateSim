@@ -23,10 +23,10 @@ void Save::loadNodes()
         rapidjson::Value& node = Nodes[i];
         std::string type = node["type"].GetString();
         if (type == "input") {
-            nodes.push_back(new Node(sf::Vector2f(node["posX"].GetFloat(), node["posY"].GetFloat()), Node::Input));
+            nodes.push_back(new Node(sf::Vector2f(node["posX"].GetInt(), node["posY"].GetInt()), Node::Input));
         }
         else if (type == "output") {
-            nodes.push_back(new Node(sf::Vector2f(node["posX"].GetFloat(), node["posY"].GetFloat()), Node::Output));
+            nodes.push_back(new Node(sf::Vector2f(node["posX"].GetInt(), node["posY"].GetInt()), Node::Output));
         }
     }
 }
@@ -39,18 +39,21 @@ void Save::loadWires()
     {
         rapidjson::Value& w = JSONwires[i];
 
-        int inNIdx = w["inputNodeIdx"].GetInt();
-        int outNIdx = w["outputNodeIdx"].GetInt();
-        int inOIdx = w["inputObjIdx"].GetInt();
-        int outOIdx = w["outputObjIdx"].GetInt();
+        Wire* newWire = new Wire();
 
-        if (inNIdx > -1 && outNIdx > -1) wires.push_back(new Wire(nodes[inNIdx], nodes[outNIdx]));
-        else if (inNIdx > -1 && outOIdx > -1) wires.push_back(new Wire(nodes[inNIdx], objects[outOIdx]));
-        else if (inOIdx > -1 && outOIdx > -1) wires.push_back(new Wire(objects[inOIdx], objects[outOIdx]));
-        else if (inOIdx > -1 && outNIdx > -1) wires.push_back(new Wire(objects[inOIdx], nodes[outNIdx]));
+        newWire->inNodeIdx = w["inputNodeIdx"].GetInt();
+        newWire->outNodeIdx = w["outputNodeIdx"].GetInt();
+        newWire->inObjIdx = w["inputObjIdx"].GetInt();
+        newWire->outObjIdx = w["outputObjIdx"].GetInt();
+        newWire->inputIndex = w["inputIndex"].GetInt();
+        newWire->outputIndex = w["outputIndex"].GetInt();
 
-        wires[wires.size() - 1]->inputIndex = w["inputIndex"].GetInt();
-        wires[wires.size() - 1]->outputIndex = w["outputIndex"].GetInt();
+        if (newWire->inNodeIdx > -1) newWire->inputNode = nodes[newWire->inNodeIdx];
+        if (newWire->outNodeIdx > -1) newWire->outputNode = nodes[newWire->outNodeIdx];
+        if (newWire->inObjIdx > -1) newWire->inputObj = objects[newWire->inObjIdx];
+        if (newWire->outObjIdx > -1) newWire->outputObj = objects[newWire->outObjIdx];
+
+        wires.push_back(newWire);
     }
 }
 
@@ -63,13 +66,13 @@ void Save::loadObjs()
         rapidjson::Value& obj = objs[i];
         std::string name = obj["name"].GetString();
         if (name == "andGate") {
-            objects.push_back(new AndGate(sf::Vector2f(obj["posX"].GetFloat(), obj["posY"].GetFloat())));
+            objects.push_back(new AndGate(sf::Vector2f(obj["posX"].GetInt(), obj["posY"].GetInt())));
         }
         else if (name == "notGate") {
-            objects.push_back(new NotGate(sf::Vector2f(obj["posX"].GetFloat(), obj["posY"].GetFloat())));
+            objects.push_back(new NotGate(sf::Vector2f(obj["posX"].GetInt(), obj["posY"].GetInt())));
         }
         else if (name == "orGate") {
-            objects.push_back(new OrGate(sf::Vector2f(obj["posX"].GetFloat(), obj["posY"].GetFloat())));
+            objects.push_back(new OrGate(sf::Vector2f(obj["posX"].GetInt(), obj["posY"].GetInt())));
         }
     }
 }
@@ -92,8 +95,8 @@ void Save::saveNodes()
 
         if (n->type == Node::Input) nS.AddMember("type", "input", d.GetAllocator());
         else if (n->type == Node::Output) nS.AddMember("type", "output", d.GetAllocator());
-        nS.AddMember("posX", (float)n->getPosition().x, d.GetAllocator());
-        nS.AddMember("posY", (float)n->getPosition().y, d.GetAllocator());
+        nS.AddMember("posX", (int)n->getPosition().x, d.GetAllocator());
+        nS.AddMember("posY", (int)n->getPosition().y, d.GetAllocator());
 
         Nodes.PushBack(nS, d.GetAllocator());
     }
@@ -108,10 +111,8 @@ void Save::saveWires()
     rapidjson::Value& wS = d["wires"];
     wS.Clear();
 
-    for (int i = 0; i < n; ++i)
+    for (Wire* wire : wires)
     {
-        Wire* wire = wires[i];
-
         rapidjson::Value w;
         w.SetObject();
 
@@ -146,8 +147,8 @@ void Save::saveObjs()
         if (name == "notGate") oS.AddMember("name", "notGate", d.GetAllocator());
         else if (name == "orGate") oS.AddMember("name", "orGate", d.GetAllocator());
         else if (name == "andGate") oS.AddMember("name", "andGate", d.GetAllocator());
-        oS.AddMember("posX", (float)o->getPosition().x, d.GetAllocator());
-        oS.AddMember("posY", (float)o->getPosition().y, d.GetAllocator());
+        oS.AddMember("posX", (int)o->getPosition().x, d.GetAllocator());
+        oS.AddMember("posY", (int)o->getPosition().y, d.GetAllocator());
 
         objs.PushBack(oS, d.GetAllocator());
     }

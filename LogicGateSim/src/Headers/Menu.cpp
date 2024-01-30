@@ -93,38 +93,43 @@ end:
 
 void Menu::menuObjs()
 {
+	const int alpha = 255;
+	sf::Color transRed = { 255, 0, 0, alpha };
+	sf::Color transWhite = { 255, 255, 255, alpha };
+
 	inNode.setRadius(25);
 	inNode.setOrigin(25, 25);
 	inNode.setPosition(bgPos + sf::Vector2f(-100, 30));
-	inNode.setFillColor(sf::Color::White);
+	inNode.setFillColor(transWhite);
 
 	nodeText.setFont(arial);
 	nodeText.setCharacterSize(30);
 	nodeText.setPosition(inNode.getPosition() + sf::Vector2f(-75, 25));
-	nodeText.setFillColor(sf::Color::Red);
+	nodeText.setFillColor(transRed);
 	nodeText.setString("Input Node");
 
 
 	outNode.setRadius(25);
 	outNode.setOrigin(25, 25);
 	outNode.setPosition(bgPos + sf::Vector2f(-285, 30));
-	outNode.setFillColor(sf::Color::White);
+	outNode.setFillColor(transWhite);
 
 	outnodeText.setFont(arial);
 	outnodeText.setCharacterSize(30);
 	outnodeText.setPosition(outNode.getPosition() + sf::Vector2f(-80, 25));
-	outnodeText.setFillColor(sf::Color::Red);
+	outnodeText.setFillColor(transRed);
 	outnodeText.setString("Output Node");
 
 	andGate.setTexture(temp.getTexture());
 	andGate.setSize(sf::Vector2f(andGate.getTexture()->getSize().x * temp.getScale().x, andGate.getTexture()->getSize().y * temp.getScale().y));
 	andGate.setOrigin(50, 25);
 	andGate.setPosition(bgPos + sf::Vector2f(-130, 150));
+	andGate.setFillColor(sf::Color(andGate.getFillColor().r, andGate.getFillColor().g, andGate.getFillColor().b, alpha));
 
 	andGateText.setFont(arial);
 	andGateText.setCharacterSize(30);
 	andGateText.setPosition(andGate.getPosition() + sf::Vector2f(-25, 50));
-	andGateText.setFillColor(sf::Color::Red);
+	andGateText.setFillColor(transRed);
 	andGateText.setString("And Gate");
 
 
@@ -132,23 +137,24 @@ void Menu::menuObjs()
 	orgate.setSize(sf::Vector2f(orgate.getTexture()->getSize().x * tempOr.getScale().x, orgate.getTexture()->getSize().y * tempOr.getScale().y));
 	orgate.setOrigin(50, 25);
 	orgate.setPosition(bgPos + sf::Vector2f(-330, 150));
+	orgate.setFillColor(sf::Color(orgate.getFillColor().r, orgate.getFillColor().g, orgate.getFillColor().b, alpha));
 
 	orGateText.setFont(arial);
 	orGateText.setCharacterSize(30);
 	orGateText.setPosition(orgate.getPosition() + sf::Vector2f(-15, 50));
-	orGateText.setFillColor(sf::Color::Red);
+	orGateText.setFillColor(transRed);
 	orGateText.setString("Or Gate");
 
 	notGate.setTexture(tempnot.getTexture());
 	notGate.setSize(sf::Vector2f(notGate.getTexture()->getSize().x * tempnot.getScale().x, notGate.getTexture()->getSize().y * tempnot.getScale().y));
 	notGate.setOrigin(50, 25);
 	notGate.setPosition(bgPos + sf::Vector2f(-300, 275));
-
+	notGate.setFillColor(sf::Color(notGate.getFillColor().r, notGate.getFillColor().g, notGate.getFillColor().b, alpha));
 
 	notGateText.setFont(arial);
 	notGateText.setCharacterSize(30);
 	notGateText.setPosition(notGate.getPosition() + sf::Vector2f(-50, 40));
-	notGateText.setFillColor(sf::Color::Red);
+	notGateText.setFillColor(transRed);
 	notGateText.setString("Not Gate");
 }
 
