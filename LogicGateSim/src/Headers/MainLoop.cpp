@@ -21,6 +21,7 @@ void Loop::loadWireTextures()
 
 void Loop::updateObjs()
 {
+	int idx = 0;
 	for (Object* obj : objects)
 	{
 		bool hover = obj->getGlobalBounds().contains(mousePos);
@@ -41,6 +42,7 @@ void Loop::updateObjs()
 							Wire* w = wires[wires.size() - 1];
 							w->outputObj = obj;
 							w->inputIndex = i;
+							w->outObjIdx = idx;
 						}
 					}
 				}
@@ -54,6 +56,7 @@ void Loop::updateObjs()
 							(*w)[1].position = obj->Outconnectors[i]->getPosition();
 							w->inputObj = obj;
 							w->outputIndex = i;
+							w->inObjIdx = idx;
 							wires.push_back(w);
 						}
 					}
@@ -62,11 +65,13 @@ void Loop::updateObjs()
 			}
 		}
 		obj->lastMid = middle;
+		++idx;
 	}
 }
 
 void Loop::updateNodes()
 {
+	int idx = 0;
 	for (Node* n : nodes)
 	{
 		bool hover = n->getGlobalBounds().contains(mousePos);
@@ -82,7 +87,7 @@ void Loop::updateNodes()
 			if (middle && !n->lastMid) {
 				if (addWire) {
 					Wire* w = wires[wires.size() - 1];
-					if (n->type == Node::Output) w->outputNode = n;
+					if (n->type == Node::Output) { { w->outputNode = n; w->outNodeIdx = idx; } }
 					else {
 						auto it = std::find(wires.begin(), wires.end(), w);
 						if (it != wires.end()) wires.erase(it);
@@ -95,6 +100,7 @@ void Loop::updateNodes()
 						(*w)[0].position = n->getPosition();
 						(*w)[1].position = n->getPosition();
 						w->inputNode = n;
+						w->inNodeIdx = idx;
 						wires.push_back(w);
 					}
 					else addWire = true;
@@ -105,6 +111,7 @@ void Loop::updateNodes()
 
 		n->lastMid = middle;
 		n->lastRight = right;
+		++idx;
 	}
 }
 
@@ -163,11 +170,11 @@ void Loop::Input() {
 				break;
 			}
 			case sf::Keyboard::Scancode::S: {
-				save->save();
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::LControl) || sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::RControl)) save->save();
 				break;
 			}
 			case sf::Keyboard::Scancode::L: {
-				save->load();
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::LControl) || sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::RControl)) save->load();
 				break;
 			}
 			default:

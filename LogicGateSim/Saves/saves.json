@@ -1,1 +1,68 @@
-{"num":2,"objects":[{"name":"andGate","posX":451,"posY":147},{"name":"orGate","posX":208,"posY":117}],"NodeNum":2,"nodes":[{"type":"output","posX":205,"posY":43},{"type":"input","posX":413,"posY":63}]}
+{
+  "Objnum": 2,
+  "objects": [
+    {
+      "name": "andGate",
+      "posX": 279.0,
+      "posY": 314.0
+    },
+    {
+      "name": "notGate",
+      "posX": 481.0,
+      "posY": 315.0
+    }
+  ],
+  "NodeNum": 3,
+  "nodes": [
+    {
+      "type": "input",
+      "posX": 107.0,
+      "posY": 373.0
+    },
+    {
+      "type": "input",
+      "posX": 103.0,
+      "posY": 199.0
+    },
+    {
+      "type": "output",
+      "posX": 663.0,
+      "posY": 315.0
+    }
+  ],
+  "WireNum": 4,
+  "wires": [
+    {
+      "inputNodeIdx": 0,
+      "outputNodeIdx": -1,
+      "inputObjIdx": -1,
+      "outputObjIdx": 0,
+      "inputIndex": 1,
+      "outputIndex": -1
+    },
+    {
+      "inputNodeIdx": 1,
+      "outputNodeIdx": -1,
+      "inputObjIdx": -1,
+      "outputObjIdx": 0,
+      "inputIndex": 0,
+      "outputIndex": -1
+    },
+    {
+      "inputNodeIdx": -1,
+      "outputNodeIdx": -1,
+      "inputObjIdx": 0,
+      "outputObjIdx": 1,
+      "inputIndex": 0,
+      "outputIndex": 0
+    },
+    {
+      "inputNodeIdx": -1,
+      "outputNodeIdx": 2,
+      "inputObjIdx": 1,
+      "outputObjIdx": -1,
+      "inputIndex": -1,
+      "outputIndex": 0
+    }
+  ]
+}

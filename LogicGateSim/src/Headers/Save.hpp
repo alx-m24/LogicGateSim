@@ -15,6 +15,13 @@ private:
 
 	void closeFile();
 	void read();
+
+	void loadNodes();
+	void loadWires();
+	void loadObjs();
+	void saveNodes();
+	void saveWires();
+	void saveObjs();
 public:
 	Save();
 	~Save();

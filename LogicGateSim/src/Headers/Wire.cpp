@@ -1,7 +1,44 @@
 #include "Wire.hpp"
+#include <iostream>
 
 Wire::Wire()
 {
+	this->setPrimitiveType(sf::Lines);
+	this->resize(2);
+}
+
+Wire::Wire(Node* InNode, Node* outNode)
+{
+	inputNode = InNode;
+	outputNode = outNode;
+
+	this->setPrimitiveType(sf::Lines);
+	this->resize(2);
+}
+
+Wire::Wire(Object* Inobj, Node* outNode)
+{
+	inputObj = Inobj;
+	outputNode = outNode;
+
+	this->setPrimitiveType(sf::Lines);
+	this->resize(2);
+}
+
+Wire::Wire(Object* Inobj, Object* outObj)
+{
+	inputObj = Inobj;
+	outputObj = outObj;
+
+	this->setPrimitiveType(sf::Lines);
+	this->resize(2);
+}
+
+Wire::Wire(Node* InNode, Object* outObj)
+{
+	inputNode = InNode;
+	outputObj = outObj;
+
 	this->setPrimitiveType(sf::Lines);
 	this->resize(2);
 }

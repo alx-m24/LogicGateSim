@@ -10,6 +10,12 @@ private:
 	void logic();
 public:
 	Wire();
+	// In node to outnode
+	Wire(Node* InNode, Node* outNode);
+	Wire(Node* InNode, Object* outObj);
+	Wire(Object* Inobj, Node* outNode);
+	Wire(Object* Inobj, Object* outObj);
+
 	void updateWire();
 
 	Object* inputObj = nullptr;
@@ -20,6 +26,9 @@ public:
 	bool state = false;
 	bool lastMid = false;
 
-	int inputIndex;
-	int outputIndex;
+	int inputIndex = -1;
+	int outputIndex = -1;
+
+	int inNodeIdx = -1, outNodeIdx = -1;
+	int inObjIdx = -1, outObjIdx = -1;
 };
