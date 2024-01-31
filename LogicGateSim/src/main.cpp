@@ -54,6 +54,9 @@ int main() {
 	sf::Text fpsText;
 	fps(&fpsText);
 
+	// Auto recovery
+	//save.load("recovery");
+
 	sf::Clock FPSclock;
 	uint8_t FPS = 0, Frame = 0;
 	// main loop
