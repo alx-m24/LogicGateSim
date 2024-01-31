@@ -4,6 +4,7 @@
 #include "Gates.hpp"
 #include "Common.hpp"
 #include "Node.hpp"
+#include "Save.hpp"
 
 class Menu {
 private:
@@ -25,15 +26,22 @@ private:
 	NotGate tempnot = NotGate(sf::Vector2f(0, 0));
 	sf::Text notGateText;
 
+	sf::Sprite save;
+	sf::Texture saveTex;
+
+	Save* mysave;
+
 	void resetAddItemPos();
 	void displayAddMenu();
 	void menuObjs();
+	void displaySaveMenu();
 public:
-	Menu();
+	Menu(Save* Mysave);
 	void updateMenu();
 	void display();
 	void resetMenu();
 
 	bool isAdding = false;
+	bool isSaving = false;
 	sf::Vector2f bgPos;
 };

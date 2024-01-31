@@ -22,6 +22,7 @@ bool right;
 bool lastright;
 bool middle;
 bool lastmiddle;
+std::string currKey;
 
 void fps(sf::Text* fpsText) {
 	fpsText->setFont(arial);
@@ -79,5 +80,6 @@ int main() {
 
 		++Frame;
 	}
+
 	return EXIT_SUCCESS;
 }

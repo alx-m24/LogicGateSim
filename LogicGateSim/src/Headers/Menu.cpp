@@ -1,6 +1,6 @@
 #include "Menu.hpp"
 
-Menu::Menu()
+Menu::Menu(Save* Mysave) : mysave(Mysave)
 {
 	sf::Vector2u winSize = window->getSize();
 
@@ -17,6 +17,12 @@ Menu::Menu()
 	thisSize = { texSize.x * thisScale.x, texSize.y * thisScale.y };
 	addItem.setPosition(winSize.x - (thisSize.x / 2), winSize.y - (thisSize.y / 2));
 
+	saveTex.loadFromFile("C:\\Users\\alexa\\Coding\\C++\\LogicGateSim\\LogicGateSim\\Resources\\save.png");
+	saveTex.setSmooth(true);
+	save.setTexture(saveTex);
+	save.setPosition(0, winSize.y - save.getTexture()->getSize().y * save.getScale().y);
+	save.scale(0.15f, 0.15f);
+
 	resetAddItemPos();
 	menuObjs();
 }
@@ -30,6 +36,8 @@ void Menu::resetAddItemPos()
 	thisSize = { texSize.x * thisScale.x, texSize.y * thisScale.y };
 	addItem.setPosition(winSize.x - (thisSize.x / 2), thisSize.y / 2);
 	bgPos = { this->addItem.getPosition().x + (thisSize.x / 2), this->addItem.getPosition().y - (thisSize.y / 2) };
+
+	save.setPosition(0, winSize.y - save.getTexture()->getSize().y * save.getScale().y);
 }
 
 void Menu::displayAddMenu()
@@ -158,6 +166,82 @@ void Menu::menuObjs()
 	notGateText.setString("Not Gate");
 }
 
+void Menu::displaySaveMenu()
+{
+	sf::RectangleShape Bg;
+	Bg.setSize(sf::Vector2f(235, 130));
+	Bg.setOrigin(0, Bg.getSize().y);
+	Bg.setFillColor(sf::Color(19, 138, 54));
+	bgPos = sf::Vector2f(0, window->getSize().y);
+	Bg.setPosition(bgPos);
+
+	sf::RectangleShape saveAsObject;
+	saveAsObject.setSize(sf::Vector2f(215, 50));
+	saveAsObject.setFillColor(sf::Color(4, 232, 36));
+	saveAsObject.setPosition(sf::Vector2f(Bg.getPosition() + sf::Vector2f(10, -60)));
+	sf::Text saveAsObjText;
+	saveAsObjText.setFont(arial);
+	saveAsObjText.setFillColor(sf::Color::Black);
+	saveAsObjText.setCharacterSize(24);
+	saveAsObjText.setString("Save as new object");
+	saveAsObjText.setPosition(saveAsObject.getPosition() + sf::Vector2f(0, 10));
+
+	sf::RectangleShape saveAsTemplate;
+	saveAsTemplate.setSize(sf::Vector2f(215, 50));
+	saveAsTemplate.setFillColor(sf::Color(4, 232, 36));
+	saveAsTemplate.setPosition(sf::Vector2f(Bg.getPosition() + sf::Vector2f(10, -120)));
+	sf::Text saveAsTempText;
+	saveAsTempText.setFont(arial);
+	saveAsTempText.setFillColor(sf::Color::Black);
+	saveAsTempText.setCharacterSize(24);
+	saveAsTempText.setString("Save as template");
+	saveAsTempText.setPosition(saveAsTemplate.getPosition() + sf::Vector2f(15, 10));
+
+	const sf::Vector2f mousePos = sf::Vector2f(sf::Mouse::getPosition(*window));
+
+	if (!Bg.getGlobalBounds().contains(mousePos)) {
+		isSaving = false;
+		return;
+	}
+	else {
+		if (saveAsObject.getGlobalBounds().contains(mousePos)) {
+			if (left) {
+				saveAsObject.setFillColor(sf::Color(52, 64, 58));
+			}
+			else if (lastleft) std::cout << "Save as obj" << std::endl;
+		}
+		else if (saveAsTemplate.getGlobalBounds().contains(mousePos)) {
+			if (left) {
+				saveAsTemplate.setFillColor(sf::Color(52, 64, 58));
+			}
+			else if (lastleft) {
+				sf::Text prompt;
+				prompt.setFont(arial);
+				prompt.setCharacterSize(48);
+				prompt.setPosition(sf::Vector2f((window->getSize().x / 2.0f) - 300, (window->getSize().y / 2.0f) - 75.0f));
+				prompt.setFillColor(sf::Color::Red);
+				prompt.setString("Please enter a name for your\n\ttemplate in the console.");
+
+				window->draw(prompt);
+				window->display();
+
+				std::cout << "Name of template: ";
+
+				std::string name;
+				std::cin >> name;
+
+				mysave->save(name);
+			}
+		}
+	}
+
+	window->draw(Bg);
+	window->draw(saveAsObject);
+	window->draw(saveAsObjText);
+	window->draw(saveAsTemplate);
+	window->draw(saveAsTempText);
+}
+
 void Menu::updateMenu()
 {
 	resetAddItemPos();
@@ -169,17 +253,25 @@ void Menu::updateMenu()
 		if (hover) {
 			isAdding = true;
 		}
+		if (save.getGlobalBounds().contains(mousePos)) isSaving = true;
 		addItem.setColor(sf::Color::White);
+		save.setColor(sf::Color::White);
 	}
 	else {
 		if (left && hover) addItem.setColor(sf::Color(126, 127, 145, 255));
+		else if (left && save.getGlobalBounds().contains(mousePos)) save.setColor(sf::Color(126, 127, 145, 255));
 	}
 }
 
 void Menu::display()
 {
 	window->draw(addItem);
+	window->draw(save);
 	if (isAdding) displayAddMenu();
+	else if (isSaving) displaySaveMenu();
+
+	InputField i;
+	i.update();
 }
 
 void Menu::resetMenu()

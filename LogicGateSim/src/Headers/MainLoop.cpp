@@ -2,7 +2,7 @@
 
 Loop::Loop(Save* Saver) : save(Saver)
 {
-	menu = new Menu;
+	menu = new Menu(Saver);
 
 	loadWireTextures();
 }
@@ -149,7 +149,7 @@ void Loop::moveConnectors(Object* obj)
 
 void Loop::Input() {
 	mousePos = sf::Vector2f(sf::Mouse::getPosition(*window));
-
+	currKey = "";
 	sf::Event event;
 	// processing sfml events
 	while (window->pollEvent(event)) {
@@ -170,6 +170,7 @@ void Loop::Input() {
 			break;
 		}
 		case sf::Event::KeyPressed: {
+			currKey = sf::Keyboard::getDescription(event.key.scancode);
 			switch (event.key.scancode)
 			{
 			case sf::Keyboard::Scancode::Escape: {
@@ -177,11 +178,11 @@ void Loop::Input() {
 				break;
 			}
 			case sf::Keyboard::Scancode::S: {
-				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::LControl) || sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::RControl)) save->save();
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::LControl) || sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::RControl)) save->save("recovery"); //save->save("test");
 				break;
 			}
 			case sf::Keyboard::Scancode::L: {
-				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::LControl) || sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::RControl)) save->load();
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::LControl) || sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::RControl)) save->load("recovery");
 				break;
 			}
 			default:

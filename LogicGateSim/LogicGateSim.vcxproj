@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Headers\Gates.cpp" />
+    <ClCompile Include="src\Headers\Input.cpp" />
     <ClCompile Include="src\Headers\MainLoop.cpp" />
     <ClCompile Include="src\Headers\Menu.cpp" />
     <ClCompile Include="src\Headers\Node.cpp" />
@@ -31,15 +32,13 @@
   <ItemGroup>
     <ClInclude Include="src\Headers\Common.hpp" />
     <ClInclude Include="src\Headers\Gates.hpp" />
+    <ClInclude Include="src\Headers\Input.hpp" />
     <ClInclude Include="src\Headers\MainLoop.hpp" />
     <ClInclude Include="src\Headers\Menu.hpp" />
     <ClInclude Include="src\Headers\Node.hpp" />
     <ClInclude Include="src\Headers\Object.hpp" />
     <ClInclude Include="src\Headers\Save.hpp" />
     <ClInclude Include="src\Headers\Wire.hpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Saves\saves.json" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

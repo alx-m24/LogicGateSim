@@ -39,6 +39,9 @@
     <ClCompile Include="src\Headers\Save.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Headers\Input.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Headers\MainLoop.hpp">
@@ -65,10 +68,8 @@
     <ClInclude Include="src\Headers\Wire.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Saves\saves.json">
-      <Filter>Resource Files</Filter>
-    </None>
+    <ClInclude Include="src\Headers\Input.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

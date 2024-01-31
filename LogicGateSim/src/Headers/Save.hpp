@@ -10,10 +10,10 @@
 
 class Save {
 private:
-	FILE* f;
+	FILE* f = nullptr;
 	rapidjson::Document d;
 
-	void closeFile();
+	void closeFile(FILE* f);
 	void read();
 
 	void loadNodes();
@@ -22,10 +22,11 @@ private:
 	void saveNodes();
 	void saveWires();
 	void saveObjs();
+	void loadTemplate();
 public:
 	Save();
 	~Save();
 
-	void load();
-	void save();
+	void load(std::string Name);
+	void save(std::string Name);
 };
