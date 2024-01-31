@@ -14,7 +14,7 @@ private:
 	sf::Vector2f mousePos;
 	Menu* menu;
 
-	Save* save;
+	Saver* save;
 	
 	void loadWireTextures();
 	void updateObjs();
@@ -22,7 +22,7 @@ private:
 	void moveConnectors(Object* obj);
 public:
 	// contruct
-	Loop(Save* Saver);
+	Loop(Saver* Saver);
 
 	void Input();
 	void Update();

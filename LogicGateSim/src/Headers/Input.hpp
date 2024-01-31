@@ -3,20 +3,32 @@
 #include <unordered_set>
 #include <iostream>
 #include "Common.hpp"
+#include "Save.hpp"
 
 class InputField {
 private:
+	bool* IsSaving;
+	bool* istemp;
+	bool toUp = false;
+
 	sf::Sprite acceptButton;
 	sf::Sprite cancelButton;
+	sf::Sprite inputfield;
 	sf::Texture acceptButtonTex;
 	sf::Texture cancelButtonTex;
+	sf::Texture inputFieldTex;
+	sf::Text input;
 
+	std::string text;
 	//const std::unordered_set<char> rejected = { '!','@','#','$','%','^','&','*','(',')','~','`' };
-	const std::unordered_set<std::string> rejected = { "!","@","#","$","%","^","&","*","(",")","~","`","" };
-public:
-	InputField();
+	std::unordered_set<std::string> rejected = { "!","@","#","$","%","^","&","*","(",")","~","`","", "[", "]" };
 
-	void update();
+	void textIn();
+public:
+	//InputField(Save* Saver, bool* isSaving);
+	InputField(bool* isSaving, bool* isTemp);
+
+	std::string update();
 	void draw();
 	void scale();
 };

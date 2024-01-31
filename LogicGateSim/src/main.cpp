@@ -31,7 +31,7 @@ void fps(sf::Text* fpsText) {
 }
 
 int main() {
-	Save save;
+	Saver save;
 
 	// window settings
 	sf::ContextSettings settings;

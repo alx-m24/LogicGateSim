@@ -8,6 +8,9 @@
 
 class Menu {
 private:
+
+	InputField* i;
+
 	sf::Sprite addItem;
 	sf::Texture addItemTex;
 	sf::Vector2f thisSize;
@@ -29,19 +32,19 @@ private:
 	sf::Sprite save;
 	sf::Texture saveTex;
 
-	Save* mysave;
+	Saver* mysave;
 
 	void resetAddItemPos();
 	void displayAddMenu();
 	void menuObjs();
 	void displaySaveMenu();
 public:
-	Menu(Save* Mysave);
+	Menu(Saver* Mysave);
 	void updateMenu();
 	void display();
 	void resetMenu();
 
 	bool isAdding = false;
-	bool isSaving = false;
+	bool isSaving = false, istemplate = false;
 	sf::Vector2f bgPos;
 };

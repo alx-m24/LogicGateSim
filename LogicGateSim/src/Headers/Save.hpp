@@ -8,7 +8,7 @@
 #include "Gates.hpp"
 #include "Node.hpp"
 
-class Save {
+class Saver {
 private:
 	FILE* f = nullptr;
 	rapidjson::Document d;
@@ -24,8 +24,8 @@ private:
 	void saveObjs();
 	void loadTemplate();
 public:
-	Save();
-	~Save();
+	Saver() = default;
+	~Saver();
 
 	void load(std::string Name);
 	void save(std::string Name);

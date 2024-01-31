@@ -1,6 +1,6 @@
 #include "MainLoop.hpp"
 
-Loop::Loop(Save* Saver) : save(Saver)
+Loop::Loop(Saver* Saver) : save(Saver)
 {
 	menu = new Menu(Saver);
 
@@ -213,7 +213,7 @@ void Loop::Update()
 
 	sf::Color curr;
 	int alpha = 255;
-	if (menu->isAdding) alpha = 100;
+	if (menu->isAdding || menu->isSaving || menu->istemplate) alpha = 50;
 
 	for (Wire* w : wires) {
 		bool hover = w->getBounds().contains(mousePos);
@@ -257,10 +257,9 @@ void Loop::Update()
 		}
 	}
 	for (Node* n : nodes) {
+		n->updateNode();
 		curr = n->getColor();
 		n->setColor(sf::Color(curr.r, curr.g, curr.b, alpha));
-
-		n->updateNode();
 
 		window->draw(*n);
 	}

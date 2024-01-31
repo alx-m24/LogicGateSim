@@ -1,11 +1,11 @@
 #include "Save.hpp"
 
-void Save::closeFile(FILE* f)
+void Saver::closeFile(FILE* f)
 {
 	if (f != 0) fclose(f);
 }
 
-void Save::read()
+void Saver::read()
 {
 	if (f != 0) {
 		char readBuffer[128];
@@ -15,7 +15,7 @@ void Save::read()
 	}
 }
 
-void Save::loadNodes()
+void Saver::loadNodes()
 {
 	int n = d["NodeNum"].GetInt();
 	rapidjson::Value& Nodes = d["nodes"];
@@ -32,7 +32,7 @@ void Save::loadNodes()
 	}
 }
 
-void Save::loadWires()
+void Saver::loadWires()
 {
 	int n = d["WireNum"].GetInt();
 	rapidjson::Value& JSONwires = d["wires"];
@@ -58,7 +58,7 @@ void Save::loadWires()
 	}
 }
 
-void Save::loadObjs()
+void Saver::loadObjs()
 {
 	int n = d["Objnum"].GetInt();
 	rapidjson::Value& objs = d["objects"];
@@ -78,7 +78,7 @@ void Save::loadObjs()
 	}
 }
 
-void Save::saveNodes()
+void Saver::saveNodes()
 {
 	int n = nodes.size();
 	if (n < 0) return;
@@ -105,7 +105,7 @@ void Save::saveNodes()
 	}
 }
 
-void Save::saveWires()
+void Saver::saveWires()
 {
 	int n = wires.size();
 	if (n < 0) return;
@@ -132,7 +132,7 @@ void Save::saveWires()
 	}
 }
 
-void Save::saveObjs()
+void Saver::saveObjs()
 {
 	int n = objects.size();
 	if (n < 0) return;
@@ -161,7 +161,7 @@ void Save::saveObjs()
 	}
 }
 
-void Save::loadTemplate()
+void Saver::loadTemplate()
 {
 	d.AddMember("Objnum", 0, d.GetAllocator());
 	d.AddMember("objects", rapidjson::kArrayType, d.GetAllocator());
@@ -171,17 +171,13 @@ void Save::loadTemplate()
 	d.AddMember("wires", rapidjson::kArrayType, d.GetAllocator());
 }
 
-Save::Save()
-{
-}
-
-Save::~Save()
+Saver::~Saver()
 {
 	save("recovery");
 	closeFile(f);
 }
 
-void Save::load(std::string Name)
+void Saver::load(std::string Name)
 {
 	std::string path = "C:\\Users\\alexa\\Coding\\C++\\LogicGateSim\\LogicGateSim\\Saves\\" + Name + ".json";
 
@@ -208,7 +204,7 @@ void Save::load(std::string Name)
 	closeFile(f);
 }
 
-void Save::save(std::string Name)
+void Saver::save(std::string Name)
 {
 	fopen_s(&f, std::string("C:\\Users\\alexa\\Coding\\C++\\LogicGateSim\\LogicGateSim\\Saves\\" + Name + ".json").c_str(), "w");
 	read();

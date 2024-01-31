@@ -1,7 +1,10 @@
 #include "Menu.hpp"
 
-Menu::Menu(Save* Mysave) : mysave(Mysave)
+Menu::Menu(Saver* Mysave) : mysave(Mysave)
 {
+	//i = new InputField(Mysave, &isSaving);
+	i = new InputField(&isSaving, &istemplate);
+
 	sf::Vector2u winSize = window->getSize();
 
 	addItemTex.loadFromFile("C:\\Users\\alexa\\Coding\\C++\\LogicGateSim\\LogicGateSim\\Resources\\AddItem.png");
@@ -38,6 +41,8 @@ void Menu::resetAddItemPos()
 	bgPos = { this->addItem.getPosition().x + (thisSize.x / 2), this->addItem.getPosition().y - (thisSize.y / 2) };
 
 	save.setPosition(0, winSize.y - save.getTexture()->getSize().y * save.getScale().y);
+
+	i->scale();
 }
 
 void Menu::displayAddMenu()
@@ -215,22 +220,7 @@ void Menu::displaySaveMenu()
 				saveAsTemplate.setFillColor(sf::Color(52, 64, 58));
 			}
 			else if (lastleft) {
-				sf::Text prompt;
-				prompt.setFont(arial);
-				prompt.setCharacterSize(48);
-				prompt.setPosition(sf::Vector2f((window->getSize().x / 2.0f) - 300, (window->getSize().y / 2.0f) - 75.0f));
-				prompt.setFillColor(sf::Color::Red);
-				prompt.setString("Please enter a name for your\n\ttemplate in the console.");
-
-				window->draw(prompt);
-				window->display();
-
-				std::cout << "Name of template: ";
-
-				std::string name;
-				std::cin >> name;
-
-				mysave->save(name);
+				istemplate = true;
 			}
 		}
 	}
@@ -268,10 +258,17 @@ void Menu::display()
 	window->draw(addItem);
 	window->draw(save);
 	if (isAdding) displayAddMenu();
-	else if (isSaving) displaySaveMenu();
-
-	InputField i;
-	i.update();
+	else if (isSaving && !istemplate) {
+		displaySaveMenu();
+	}
+	if (istemplate) {
+		std::string name = i->update();
+		if (!name.empty()) {
+			mysave->save(name);
+			return;
+		}
+		i->draw();
+	}
 }
 
 void Menu::resetMenu()
