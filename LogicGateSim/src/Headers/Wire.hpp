@@ -12,8 +12,6 @@ public:
 	Wire();
 
 	void updateWire();
-	void initialize();
-	bool collide(sf::Vector2f pos);
 
 	Object* inputObj = nullptr;
 	Object* outputObj = nullptr;

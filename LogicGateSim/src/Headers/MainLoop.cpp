@@ -28,18 +28,6 @@ void Loop::updateObjs()
 		if (hover) {
 			if (left && !moving) { obj->moving = true; moving = true; }
 			else if (sf::Keyboard::isKeyPressed(sf::Keyboard::BackSpace) || sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Delete)) {
-
-				/*
-				for (int i = 0; i < wires.size(); i++)
-				{
-					Wire* w = wires[i];
-
-					if (w->outObjIdx == idx || w->inObjIdx == idx) {
-						wires.erase(wires.begin() + i);
-						delete w;
-						i--; // decrement the index
-					}
-				}*/
 				oDelete.insert(idx);
 			}
 			else if (middle && !obj->lastMid) {
@@ -201,8 +189,7 @@ void Loop::Input() {
 		}
 		case sf::Event::KeyPressed: {
 			currKey = sf::Keyboard::getDescription(event.key.scancode);
-			switch (event.key.scancode)
-			{
+			switch (event.key.scancode) {
 			case sf::Keyboard::Scancode::Escape: {
 				window->close();
 				break;
@@ -218,6 +205,7 @@ void Loop::Input() {
 			default:
 				break;
 			}
+			break;
 		}
 		default:
 			break;
@@ -249,8 +237,6 @@ void Loop::Update()
 	for (Wire* w : wires) {
 		bool hover = w->getBounds().contains(mousePos);
 		bool mid = sf::Mouse::isButtonPressed(sf::Mouse::Middle);
-
-		//if (w->collide(mousePos)) std::cout << "c" << std::endl;
 
 		if (hover && mid && !w->lastMid) {
 			wDelete.insert(i);
@@ -313,14 +299,6 @@ void Loop::Update()
 
 void Loop::Render()
 {
-	/*
-	for (Wire* w : wires) window->draw(*w);
-	for (Object* obj : objects) {
-		window->draw(*obj);
-		for (Connector* c : obj->Inconnectors) window->draw(*c);
-		for (Connector* c : obj->Outconnectors) window->draw(*c);
-	}
-	for (Node* n : nodes) window->draw(*n);*/
 	if (addWire) window->draw(addWireSprite);
 
 	window->display();

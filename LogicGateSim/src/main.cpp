@@ -1,7 +1,5 @@
 // SFML
 #include <SFML/Graphics.hpp>
-// Other
-#include <iostream>
 // My headers
 #include "Headers/MainLoop.hpp"
 #include "Headers/Common.hpp"
@@ -10,9 +8,11 @@
 #include "Headers/Node.hpp"
 #include "Headers/Wire.hpp"
 #include "Headers/Save.hpp"
+#include "Headers/Useful.hpp"
 
 sf::RenderWindow* window;
 sf::Font arial;
+std::string currKey;
 std::vector<Object*> objects;
 std::vector<Node*> nodes;
 std::vector<Wire*> wires;
@@ -22,13 +22,6 @@ bool right;
 bool lastright;
 bool middle;
 bool lastmiddle;
-std::string currKey;
-
-void fps(sf::Text* fpsText) {
-	fpsText->setFont(arial);
-	fpsText->setFillColor(sf::Color::Red);
-	fpsText->setCharacterSize(24);
-}
 
 int main() {
 	Saver save;
@@ -39,37 +32,20 @@ int main() {
 
 	// creating window
 	sf::RenderWindow Mainwindow(sf::VideoMode(800, 600), "Logic Gate Sim", sf::Style::Default, settings);
-	Mainwindow.setPosition(Mainwindow.getPosition() - sf::Vector2i(0, 50));
-	Mainwindow.setVerticalSyncEnabled(true);
-
-	sf::Image icon;
-	icon.loadFromFile("C:\\Users\\alexa\\Coding\\C++\\LogicGateSim\\LogicGateSim\\Resources\\Icon.png");
-	Mainwindow.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
-
 	window = &Mainwindow;
+	setupWindow();
 	// my main loop class
 	Loop loop(&save);
 
-	arial.loadFromFile("C:/Windows/Fonts/arial.ttf");
 	sf::Text fpsText;
-	fps(&fpsText);
-
-	// Auto recovery
-	save.load("XOR");
+	setupfps(&fpsText);
 
 	sf::Clock FPSclock;
-	uint8_t FPS = 0, Frame = 0;
+	unsigned int Frame = 0;
 	// main loop
 	while (Mainwindow.isOpen())
 	{
-		if (FPSclock.getElapsedTime().asSeconds() >= 1.f)
-		{
-			FPS = Frame;
-			Frame = 0;
-			FPSclock.restart();
-
-			fpsText.setString("FPS: " + std::to_string(FPS));
-		}
+		fps(&fpsText, &FPSclock, &Frame);
 
 		// processing inputs(pointer to snake object)
 		loop.Input();
@@ -80,8 +56,6 @@ int main() {
 		// rendering all objects
 		window->draw(fpsText);
 		loop.Render();
-
-		++Frame;
 	}
 
 	return EXIT_SUCCESS;

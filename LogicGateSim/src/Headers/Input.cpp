@@ -28,7 +28,6 @@ void InputField::textIn()
 	}
 }
 
-//InputField::InputField(Save* Saver, bool* isSaving)
 InputField::InputField(bool* isSaving, bool* isTemp)
 {
 	acceptButtonTex.loadFromFile("C:\\Users\\alexa\\Coding\\C++\\LogicGateSim\\LogicGateSim\\Resources\\Accept.png");

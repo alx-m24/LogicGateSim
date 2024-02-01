@@ -26,8 +26,15 @@ Menu::Menu(Saver* Mysave) : mysave(Mysave)
 	save.setPosition(0, winSize.y - save.getTexture()->getSize().y * save.getScale().y);
 	save.scale(0.15f, 0.15f);
 
+	LoadTex.loadFromFile("C:\\Users\\alexa\\Coding\\C++\\LogicGateSim\\LogicGateSim\\Resources\\Load.png");
+	LoadTex.setSmooth(true);
+	Load.setTexture(LoadTex);
+	Load.setPosition(128, winSize.y - Load.getTexture()->getSize().y * Load.getScale().y - 1);
+	Load.scale(0.125f, 0.125f);
+
 	resetAddItemPos();
 	menuObjs();
+	setupSaveMenu();
 	setupSaveMenu();
 }
 
@@ -42,6 +49,7 @@ void Menu::resetAddItemPos()
 	bgPos = { this->addItem.getPosition().x + (thisSize.x / 2), this->addItem.getPosition().y - (thisSize.y / 2) };
 
 	save.setPosition(0, winSize.y - save.getTexture()->getSize().y * save.getScale().y);
+	Load.setPosition(128, winSize.y - Load.getTexture()->getSize().y * Load.getScale().y - 1);
 
 	i->scale();
 }
@@ -181,7 +189,6 @@ void Menu::displaySaveMenu()
 
 	if (!SaveBg.getGlobalBounds().contains(mousePos)) {
 		isSaving = false;
-		return;
 	}
 	else {
 		if (saveAsObject.getGlobalBounds().contains(mousePos)) {
@@ -195,6 +202,22 @@ void Menu::displaySaveMenu()
 				saveAsTemplate.setFillColor(sf::Color(52, 64, 58));
 			}
 			else if (lastleft) istemplate = true;
+		}
+	}
+
+	if (!Loadbg.getGlobalBounds().contains(mousePos)) {
+		isLoading = false;
+	}
+	else {
+		if (left) {
+			LoadAsObject.setFillColor(sf::Color(52, 64, 58));
+			if (!lastleft) std::cout << "Load obj" << std::endl;
+		}
+		else if (LoadAsTemplate.getGlobalBounds().contains(mousePos)) {
+			if (left) {
+				LoadAsTemplate.setFillColor(sf::Color(52, 64, 58));
+			}
+			else if (lastleft);//isLoading = true;
 		}
 	}
 
@@ -235,6 +258,35 @@ void Menu::setupSaveMenu()
 	saveAsTempText.setPosition(saveAsTemplate.getPosition() + sf::Vector2f(15, 10));
 }
 
+void Menu::setupLoadMenu()
+{
+	Loadbg.setSize(sf::Vector2f(235, 130));
+	Loadbg.setOrigin(0, Loadbg.getSize().y);
+	Loadbg.setFillColor(sf::Color(19, 138, 54));
+	bgPos = sf::Vector2f(0, window->getSize().y);
+	Loadbg.setPosition(bgPos);
+
+	LoadAsObject.setSize(sf::Vector2f(215, 50));
+	LoadAsObject.setFillColor(sf::Color(4, 232, 36));
+	LoadAsObject.setPosition(sf::Vector2f(Loadbg.getPosition() + sf::Vector2f(10, -60)));
+
+	LoadAsObjText.setFont(arial);
+	LoadAsObjText.setFillColor(sf::Color::Black);
+	LoadAsObjText.setCharacterSize(24);
+	LoadAsObjText.setString("Load as object");
+	LoadAsObjText.setPosition(LoadAsObject.getPosition() + sf::Vector2f(0, 10));
+
+	LoadAsTemplate.setSize(sf::Vector2f(215, 50));
+	LoadAsTemplate.setFillColor(sf::Color(4, 232, 36));
+	LoadAsTemplate.setPosition(sf::Vector2f(Loadbg.getPosition() + sf::Vector2f(10, -120)));
+
+	LoadAsTempText.setFont(arial);
+	LoadAsTempText.setFillColor(sf::Color::Black);
+	LoadAsTempText.setCharacterSize(24);
+	LoadAsTempText.setString("Load as template");
+	LoadAsTempText.setPosition(LoadAsTemplate.getPosition() + sf::Vector2f(15, 10));
+}
+
 void Menu::updateMenu()
 {
 	resetAddItemPos();
@@ -247,12 +299,15 @@ void Menu::updateMenu()
 			isAdding = true;
 		}
 		if (save.getGlobalBounds().contains(mousePos)) isSaving = true;
+		if (Load.getGlobalBounds().contains(mousePos)) isLoading = true;
 		addItem.setColor(sf::Color::White);
 		save.setColor(sf::Color::White);
+		Load.setColor(sf::Color::White);
 	}
 	else {
 		if (left && hover) addItem.setColor(sf::Color(126, 127, 145, 255));
 		else if (left && save.getGlobalBounds().contains(mousePos)) save.setColor(sf::Color(126, 127, 145, 255));
+		else if (left && Load.getGlobalBounds().contains(mousePos)) Load.setColor(sf::Color(126, 127, 145, 255));
 	}
 }
 
@@ -260,6 +315,16 @@ void Menu::display()
 {
 	window->draw(addItem);
 	window->draw(save);
+	window->draw(Load);
+	
+	if (isLoading) {
+		std::vector<std::string> paths = getFiles("C:\\Users\\alexa\\Coding\\C++\\LogicGateSim\\LogicGateSim\\Saves");
+		for (std::string s : paths) {
+			std::string name = nameFromPath(s, ".json");
+			std::cout << name << std::endl;
+		}
+	}
+
 	if (isAdding) displayAddMenu();
 	else if (isSaving && !istemplate) {
 		displaySaveMenu();
@@ -277,6 +342,6 @@ void Menu::display()
 void Menu::resetMenu()
 {
 	resetAddItemPos();
-	menuObjs();
 	setupSaveMenu();
+	setupLoadMenu();
 }
