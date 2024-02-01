@@ -1,5 +1,6 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include <set>
 #include "Object.hpp"
 #include "Node.hpp"
 #include "Common.hpp"
@@ -12,6 +13,11 @@ private:
 	sf::Texture addWireTex;
 	sf::Sprite addWireSprite;
 	sf::Vector2f mousePos;
+	
+	std::set<int> wDelete;
+	std::set<int> oDelete;
+	std::set<int> nDelete;
+
 	Menu* menu;
 
 	Saver* save;

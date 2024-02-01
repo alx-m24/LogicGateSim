@@ -55,7 +55,7 @@ int main() {
 	fps(&fpsText);
 
 	// Auto recovery
-	//save.load("recovery");
+	save.load("XOR");
 
 	sf::Clock FPSclock;
 	uint8_t FPS = 0, Frame = 0;

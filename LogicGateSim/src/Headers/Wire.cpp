@@ -48,3 +48,14 @@ void Wire::updateWire()
 void Wire::initialize()
 {
 }
+
+bool Wire::collide(sf::Vector2f pos)
+{
+	sf::Vector2f pos1 = (*this)[0].position, pos2 = (*this)[1].position;
+	float m = (pos2.y - pos1.y) / (pos2.x - pos1.x);
+
+	float y = m * (pos.x - pos2.x) + pos2.y;
+
+	if (y == pos.y) return true;
+	return false;
+}

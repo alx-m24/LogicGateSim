@@ -28,19 +28,19 @@ void Loop::updateObjs()
 		if (hover) {
 			if (left && !moving) { obj->moving = true; moving = true; }
 			else if (sf::Keyboard::isKeyPressed(sf::Keyboard::BackSpace) || sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Delete)) {
-				for (Wire* w : wires)
-				{
-					if (w->outObjIdx == idx || w->inObjIdx == idx) {
-						auto it = std::find(wires.begin(), wires.end(), w);
-						if (it != wires.end()) wires.erase(it);
-						delete w;
-					}
-				}
 
-				auto it = std::find(objects.begin(), objects.end(), obj);
-				if (it != objects.end()) objects.erase(it);
-				delete obj;
-				return;
+				/*
+				for (int i = 0; i < wires.size(); i++)
+				{
+					Wire* w = wires[i];
+
+					if (w->outObjIdx == idx || w->inObjIdx == idx) {
+						wires.erase(wires.begin() + i);
+						delete w;
+						i--; // decrement the index
+					}
+				}*/
+				oDelete.insert(idx);
 			}
 			else if (middle && !obj->lastMid) {
 				if (addWire) {
@@ -103,28 +103,28 @@ void Loop::updateNodes()
 				addWire = false;
 			}
 			else if (sf::Keyboard::isKeyPressed(sf::Keyboard::BackSpace) || sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Delete)) {
-				for (Wire* w : wires)
-				{
-					if (w->inNodeIdx == idx || w->outNodeIdx == idx) {
-						auto it = std::find(wires.begin(), wires.end(), w);
-						if (it != wires.end()) wires.erase(it);
-						delete w;
-					}
-				}
 
-				auto it = std::find(nodes.begin(), nodes.end(), n);
-				if (it != nodes.end()) nodes.erase(it);
-				delete n;
-				return;
+				/*
+				for (int i = 0; i < wires.size(); i++)
+				{
+					Wire* w = wires[i];
+
+					if (w->outNodeIdx == idx || w->inNodeIdx == idx) {
+						wires.erase(wires.begin() + i);
+						delete w;
+						i--; // decrement the index
+					}
+				}*/
+
+				nDelete.insert(idx);
 			}
-			if (middle && !n->lastMid) {
+			else if (middle && !n->lastMid) {
 				if (addWire) {
 					Wire* w = wires[wires.size() - 1];
 					if (n->type == Node::Output) { { w->outputNode = n; w->outNodeIdx = idx; } }
 					else {
 						auto it = std::find(wires.begin(), wires.end(), w);
 						if (it != wires.end()) wires.erase(it);
-						delete w;
 					}
 				}
 				else {
@@ -212,7 +212,7 @@ void Loop::Input() {
 				break;
 			}
 			case sf::Keyboard::Scancode::L: {
-				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::LControl) || sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::RControl)) save->load("XOR");
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::LControl) || sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::RControl)) save->load("recovery");
 				break;
 			}
 			default:
@@ -245,15 +245,15 @@ void Loop::Update()
 	int alpha = 255;
 	if (menu->isAdding || menu->isSaving || menu->istemplate) alpha = 50;
 
+	int i = 0;
 	for (Wire* w : wires) {
 		bool hover = w->getBounds().contains(mousePos);
 		bool mid = sf::Mouse::isButtonPressed(sf::Mouse::Middle);
 
+		//if (w->collide(mousePos)) std::cout << "c" << std::endl;
+
 		if (hover && mid && !w->lastMid) {
-			auto it = std::find(wires.begin(), wires.end(), w);
-			if (it != wires.end()) wires.erase(it);
-			delete w;
-			break;
+			wDelete.insert(i);
 		}
 		else {
 			w->updateWire();
@@ -263,10 +263,12 @@ void Loop::Update()
 			curr = (*w)[1].color;
 			(*w)[1].color = sf::Color(curr.r, curr.g, curr.b, alpha);
 
-			w->lastMid = mid;
 			window->draw(*w);
 		}
+		++i;
+		w->lastMid = mid;
 	}
+
 	for (Object* obj : objects) {
 		obj->updateObj();
 
@@ -294,6 +296,19 @@ void Loop::Update()
 
 		window->draw(*n);
 	}
+
+	for (int i : wDelete) {
+		auto it = std::find(wires.begin(), wires.end(), wires[i]);
+		if (it != wires.end()) wires.erase(it);
+		//wires.erase(wires.begin() + i);
+	}
+	wDelete.clear();
+	for (int i : oDelete) objects.erase(objects.begin() + i);
+	oDelete.clear();
+	for (int i : nDelete) nodes.erase(nodes.begin() + i);
+	nDelete.clear();
+
+	if (objects.size() <= 0 && nodes.size() <= 0) wires.clear();
 }
 
 void Loop::Render()
