@@ -27,8 +27,22 @@ void Loop::updateObjs()
 		bool hover = obj->getGlobalBounds().contains(mousePos);
 		if (hover) {
 			if (left && !moving) { obj->moving = true; moving = true; }
+			else if (sf::Keyboard::isKeyPressed(sf::Keyboard::BackSpace) || sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Delete)) {
+				for (Wire* w : wires)
+				{
+					if (w->outObjIdx == idx || w->inObjIdx == idx) {
+						auto it = std::find(wires.begin(), wires.end(), w);
+						if (it != wires.end()) wires.erase(it);
+						delete w;
+					}
+				}
 
-			if (middle && !obj->lastMid) {
+				auto it = std::find(objects.begin(), objects.end(), obj);
+				if (it != objects.end()) objects.erase(it);
+				delete obj;
+				return;
+			}
+			else if (middle && !obj->lastMid) {
 				if (addWire) {
 					for (int i = 0; i < obj->Inconnectors.size(); ++i)
 					{
@@ -38,6 +52,7 @@ void Loop::updateObjs()
 							w->outputObj = obj;
 							w->inputIndex = i;
 							w->outObjIdx = idx;
+							addWire = !addWire;
 						}
 					}
 				}
@@ -53,10 +68,10 @@ void Loop::updateObjs()
 							w->outputIndex = i;
 							w->inObjIdx = idx;
 							wires.push_back(w);
+							addWire = !addWire;
 						}
 					}
 				}
-				addWire = !addWire;
 			}
 		}
 		if (!left && lastleft && obj->moving) { obj->moving = false; moving = false; }
@@ -87,6 +102,21 @@ void Loop::updateNodes()
 				n->state = !n->state;
 				addWire = false;
 			}
+			else if (sf::Keyboard::isKeyPressed(sf::Keyboard::BackSpace) || sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Delete)) {
+				for (Wire* w : wires)
+				{
+					if (w->inNodeIdx == idx || w->outNodeIdx == idx) {
+						auto it = std::find(wires.begin(), wires.end(), w);
+						if (it != wires.end()) wires.erase(it);
+						delete w;
+					}
+				}
+
+				auto it = std::find(nodes.begin(), nodes.end(), n);
+				if (it != nodes.end()) nodes.erase(it);
+				delete n;
+				return;
+			}
 			if (middle && !n->lastMid) {
 				if (addWire) {
 					Wire* w = wires[wires.size() - 1];
@@ -111,7 +141,7 @@ void Loop::updateNodes()
 				addWire = !addWire;
 			}
 		}
-	
+		
 		if (!left && lastleft && n->moving) { n->moving = false; moving = false; }
 		else if (n->moving) n->setPosition(mousePos);
 
@@ -182,7 +212,7 @@ void Loop::Input() {
 				break;
 			}
 			case sf::Keyboard::Scancode::L: {
-				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::LControl) || sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::RControl)) save->load("recovery");
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::LControl) || sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::RControl)) save->load("XOR");
 				break;
 			}
 			default:
@@ -223,6 +253,7 @@ void Loop::Update()
 			auto it = std::find(wires.begin(), wires.end(), w);
 			if (it != wires.end()) wires.erase(it);
 			delete w;
+			break;
 		}
 		else {
 			w->updateWire();

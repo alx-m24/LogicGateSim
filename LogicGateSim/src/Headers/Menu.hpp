@@ -28,7 +28,11 @@ private:
 	sf::RectangleShape notGate;
 	NotGate tempnot = NotGate(sf::Vector2f(0, 0));
 	sf::Text notGateText;
-
+	sf::RectangleShape SaveBg;
+	sf::RectangleShape saveAsObject;
+	sf::Text saveAsObjText;
+	sf::RectangleShape saveAsTemplate;
+	sf::Text saveAsTempText;
 	sf::Sprite save;
 	sf::Texture saveTex;
 
@@ -38,6 +42,7 @@ private:
 	void displayAddMenu();
 	void menuObjs();
 	void displaySaveMenu();
+	void setupSaveMenu();
 public:
 	Menu(Saver* Mysave);
 	void updateMenu();

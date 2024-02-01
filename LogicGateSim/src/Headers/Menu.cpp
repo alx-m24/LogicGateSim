@@ -28,6 +28,7 @@ Menu::Menu(Saver* Mysave) : mysave(Mysave)
 
 	resetAddItemPos();
 	menuObjs();
+	setupSaveMenu();
 }
 
 void Menu::resetAddItemPos()
@@ -173,38 +174,12 @@ void Menu::menuObjs()
 
 void Menu::displaySaveMenu()
 {
-	sf::RectangleShape Bg;
-	Bg.setSize(sf::Vector2f(235, 130));
-	Bg.setOrigin(0, Bg.getSize().y);
-	Bg.setFillColor(sf::Color(19, 138, 54));
-	bgPos = sf::Vector2f(0, window->getSize().y);
-	Bg.setPosition(bgPos);
-
-	sf::RectangleShape saveAsObject;
-	saveAsObject.setSize(sf::Vector2f(215, 50));
-	saveAsObject.setFillColor(sf::Color(4, 232, 36));
-	saveAsObject.setPosition(sf::Vector2f(Bg.getPosition() + sf::Vector2f(10, -60)));
-	sf::Text saveAsObjText;
-	saveAsObjText.setFont(arial);
-	saveAsObjText.setFillColor(sf::Color::Black);
-	saveAsObjText.setCharacterSize(24);
-	saveAsObjText.setString("Save as new object");
-	saveAsObjText.setPosition(saveAsObject.getPosition() + sf::Vector2f(0, 10));
-
-	sf::RectangleShape saveAsTemplate;
-	saveAsTemplate.setSize(sf::Vector2f(215, 50));
-	saveAsTemplate.setFillColor(sf::Color(4, 232, 36));
-	saveAsTemplate.setPosition(sf::Vector2f(Bg.getPosition() + sf::Vector2f(10, -120)));
-	sf::Text saveAsTempText;
-	saveAsTempText.setFont(arial);
-	saveAsTempText.setFillColor(sf::Color::Black);
-	saveAsTempText.setCharacterSize(24);
-	saveAsTempText.setString("Save as template");
-	saveAsTempText.setPosition(saveAsTemplate.getPosition() + sf::Vector2f(15, 10));
-
 	const sf::Vector2f mousePos = sf::Vector2f(sf::Mouse::getPosition(*window));
 
-	if (!Bg.getGlobalBounds().contains(mousePos)) {
+	saveAsObject.setFillColor(sf::Color(4, 232, 36));
+	saveAsTemplate.setFillColor(sf::Color(4, 232, 36));
+
+	if (!SaveBg.getGlobalBounds().contains(mousePos)) {
 		isSaving = false;
 		return;
 	}
@@ -212,24 +187,52 @@ void Menu::displaySaveMenu()
 		if (saveAsObject.getGlobalBounds().contains(mousePos)) {
 			if (left) {
 				saveAsObject.setFillColor(sf::Color(52, 64, 58));
+				if (!lastleft) std::cout << "Save as obj" << std::endl;
 			}
-			else if (lastleft) std::cout << "Save as obj" << std::endl;
 		}
 		else if (saveAsTemplate.getGlobalBounds().contains(mousePos)) {
 			if (left) {
 				saveAsTemplate.setFillColor(sf::Color(52, 64, 58));
 			}
-			else if (lastleft) {
-				istemplate = true;
-			}
+			else if (lastleft) istemplate = true;
 		}
 	}
 
-	window->draw(Bg);
+	window->draw(SaveBg);
 	window->draw(saveAsObject);
 	window->draw(saveAsObjText);
 	window->draw(saveAsTemplate);
 	window->draw(saveAsTempText);
+}
+
+void Menu::setupSaveMenu()
+{
+	SaveBg.setSize(sf::Vector2f(235, 130));
+	SaveBg.setOrigin(0, SaveBg.getSize().y);
+	SaveBg.setFillColor(sf::Color(19, 138, 54));
+	bgPos = sf::Vector2f(0, window->getSize().y);
+	SaveBg.setPosition(bgPos);
+
+	saveAsObject.setSize(sf::Vector2f(215, 50));
+	saveAsObject.setFillColor(sf::Color(4, 232, 36));
+	saveAsObject.setPosition(sf::Vector2f(SaveBg.getPosition() + sf::Vector2f(10, -60)));
+	
+	saveAsObjText.setFont(arial);
+	saveAsObjText.setFillColor(sf::Color::Black);
+	saveAsObjText.setCharacterSize(24);
+	saveAsObjText.setString("Save as new object");
+	saveAsObjText.setPosition(saveAsObject.getPosition() + sf::Vector2f(0, 10));
+
+	
+	saveAsTemplate.setSize(sf::Vector2f(215, 50));
+	saveAsTemplate.setFillColor(sf::Color(4, 232, 36));
+	saveAsTemplate.setPosition(sf::Vector2f(SaveBg.getPosition() + sf::Vector2f(10, -120)));
+	
+	saveAsTempText.setFont(arial);
+	saveAsTempText.setFillColor(sf::Color::Black);
+	saveAsTempText.setCharacterSize(24);
+	saveAsTempText.setString("Save as template");
+	saveAsTempText.setPosition(saveAsTemplate.getPosition() + sf::Vector2f(15, 10));
 }
 
 void Menu::updateMenu()
@@ -275,4 +278,5 @@ void Menu::resetMenu()
 {
 	resetAddItemPos();
 	menuObjs();
+	setupSaveMenu();
 }
