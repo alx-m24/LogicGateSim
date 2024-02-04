@@ -27,7 +27,7 @@ void Loop::updateObjs()
 		bool hover = obj->getGlobalBounds().contains(mousePos);
 		if (hover) {
 			if (left && !moving) { obj->moving = true; moving = true; }
-			else if (sf::Keyboard::isKeyPressed(sf::Keyboard::BackSpace) || sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Delete)) {
+			else if (!menu->isSaving && (sf::Keyboard::isKeyPressed(sf::Keyboard::BackSpace) || sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Delete))) {
 				oDelete.insert(idx);
 			}
 			else if (middle && !obj->lastMid) {
@@ -90,19 +90,7 @@ void Loop::updateNodes()
 				n->state = !n->state;
 				addWire = false;
 			}
-			else if (sf::Keyboard::isKeyPressed(sf::Keyboard::BackSpace) || sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Delete)) {
-
-				/*
-				for (int i = 0; i < wires.size(); i++)
-				{
-					Wire* w = wires[i];
-
-					if (w->outNodeIdx == idx || w->inNodeIdx == idx) {
-						wires.erase(wires.begin() + i);
-						delete w;
-						i--; // decrement the index
-					}
-				}*/
+			else if (!menu->isSaving && (sf::Keyboard::isKeyPressed(sf::Keyboard::BackSpace) || sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Delete))) {
 
 				nDelete.insert(idx);
 			}
@@ -191,7 +179,11 @@ void Loop::Input() {
 			currKey = sf::Keyboard::getDescription(event.key.scancode);
 			switch (event.key.scancode) {
 			case sf::Keyboard::Scancode::Escape: {
-				window->close();
+				menu->isAdding = false;
+				menu->isSaving = false;
+				menu->istemplate = false;
+				menu->loadTemp = false;
+				menu->isLoading = false;
 				break;
 			}
 			case sf::Keyboard::Scancode::S: {
@@ -231,7 +223,7 @@ void Loop::Update()
 
 	sf::Color curr;
 	int alpha = 255;
-	if (menu->isAdding || menu->isSaving || menu->istemplate) alpha = 50;
+	if (menu->isAdding || menu->isSaving || menu->istemplate || menu->isLoading || menu->loadTemp) alpha = 50;
 
 	int i = 0;
 	for (Wire* w : wires) {

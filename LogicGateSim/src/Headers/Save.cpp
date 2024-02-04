@@ -224,3 +224,19 @@ void Saver::save(std::string Name)
 	closeFile(f);
 	std::cout << "State Saved" << std::endl;
 }
+
+void Saver::clearAll()
+{
+	for (Wire* w : wires) {
+		delete w;
+	}
+	wires.clear();
+	for (Node* n : nodes) {
+		delete n;
+	}
+	nodes.clear();
+	for (Object* o : objects) {
+		delete o;
+	}
+	objects.clear();
+}

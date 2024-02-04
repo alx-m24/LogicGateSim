@@ -65,3 +65,13 @@ std::string nameFromPath(std::string path, std::string fileExtension) {
 	path.erase(path.end() - fileExtension.length(), path.end());
 	return path.substr(path.find_last_of("/\\.") + 1);
 }
+
+void hideConsole()
+{
+	ShowWindow(GetConsoleWindow(), SW_HIDE);
+}
+
+void showConsole()
+{
+	ShowWindow(GetConsoleWindow(), SW_SHOW);
+}

@@ -35,7 +35,7 @@ Menu::Menu(Saver* Mysave) : mysave(Mysave)
 	resetAddItemPos();
 	menuObjs();
 	setupSaveMenu();
-	setupSaveMenu();
+	setupLoadMenu();
 }
 
 void Menu::resetAddItemPos()
@@ -205,27 +205,88 @@ void Menu::displaySaveMenu()
 		}
 	}
 
-	if (!Loadbg.getGlobalBounds().contains(mousePos)) {
-		isLoading = false;
-	}
-	else {
-		if (left) {
-			LoadAsObject.setFillColor(sf::Color(52, 64, 58));
-			if (!lastleft) std::cout << "Load obj" << std::endl;
-		}
-		else if (LoadAsTemplate.getGlobalBounds().contains(mousePos)) {
-			if (left) {
-				LoadAsTemplate.setFillColor(sf::Color(52, 64, 58));
-			}
-			else if (lastleft);//isLoading = true;
-		}
-	}
-
 	window->draw(SaveBg);
 	window->draw(saveAsObject);
 	window->draw(saveAsObjText);
 	window->draw(saveAsTemplate);
 	window->draw(saveAsTempText);
+}
+
+void Menu::displayLoadMenu()
+{
+	const sf::Vector2f mousePos = sf::Vector2f(sf::Mouse::getPosition(*window));
+
+	LoadAsObject.setFillColor(sf::Color(34, 0, 124));
+	LoadAsTemplate.setFillColor(sf::Color(34, 0, 124));
+
+	if (!Loadbg.getGlobalBounds().contains(mousePos)) {
+		isLoading = false;
+	}
+	else {
+		if (LoadAsObject.getGlobalBounds().contains(mousePos)) {
+			if (left) {
+				LoadAsObject.setFillColor(sf::Color(52, 64, 58));
+				if (!lastleft) std::cout << "Load as obj" << std::endl;
+			}
+		}
+		else if (LoadAsTemplate.getGlobalBounds().contains(mousePos)) {
+			if (left) {
+				LoadAsTemplate.setFillColor(sf::Color(52, 64, 58));
+			}
+			else if (lastleft) loadTemp = true;
+		}
+	}
+
+	window->draw(Loadbg);
+	window->draw(LoadAsObject);
+	window->draw(LoadAsObjText);
+	window->draw(LoadAsTemplate);
+	window->draw(LoadAsTempText);
+}
+
+void Menu::displayLoadTemp()
+{
+	std::vector<std::string> files = getFiles(".\\Saves");
+	sf::Vector2f size = { 200, 80 };
+	sf::Vector2f pos = { (size.x / 2) + 4, window->getSize().y - 4 - (size.y / 2) };
+
+	for (std::string s : files) {
+		std::string name = nameFromPath(s, ".json");
+
+		sf::RectangleShape Option(size);
+		
+		Option.setFillColor(sf::Color(0, 52, 207));
+		Option.setOutlineThickness(4);
+		Option.setOutlineColor(sf::Color(0, 24, 94));
+		Option.setOrigin(sf::Vector2f(Option.getSize()) / 2.0f);
+		Option.setPosition(pos);
+
+		sf::Text optiontext;
+		optiontext.setFont(arial);
+		optiontext.setPosition(pos.x - (name.length() * 12), pos.y - 25);
+		optiontext.setFillColor(sf::Color::Black);
+		optiontext.setCharacterSize(48);
+		optiontext.setString(name);
+
+		if (left && !lastleft && Option.getGlobalBounds().contains(sf::Vector2f(sf::Mouse::getPosition(*window)))) {
+			Option.setFillColor(sf::Color(35, 47, 84));
+			Option.setOutlineColor(sf::Color(23, 29, 46));
+
+			loadTemp = false;
+
+			Saver saver;
+			saver.clearAll();
+			saver.load(name);
+		}
+
+		window->draw(Option);
+		window->draw(optiontext);
+		pos.y -= size.y;
+		if (pos.y < window->getSize().y / 4) {
+			pos.y = window->getSize().y - 4 - (size.y / 2);
+			pos.x += size.x + 4;
+		}
+	}
 }
 
 void Menu::setupSaveMenu()
@@ -262,22 +323,22 @@ void Menu::setupLoadMenu()
 {
 	Loadbg.setSize(sf::Vector2f(235, 130));
 	Loadbg.setOrigin(0, Loadbg.getSize().y);
-	Loadbg.setFillColor(sf::Color(19, 138, 54));
+	Loadbg.setFillColor(sf::Color(4, 5, 46));
 	bgPos = sf::Vector2f(0, window->getSize().y);
 	Loadbg.setPosition(bgPos);
 
 	LoadAsObject.setSize(sf::Vector2f(215, 50));
-	LoadAsObject.setFillColor(sf::Color(4, 232, 36));
+	LoadAsObject.setFillColor(sf::Color(13, 0, 164));
 	LoadAsObject.setPosition(sf::Vector2f(Loadbg.getPosition() + sf::Vector2f(10, -60)));
 
 	LoadAsObjText.setFont(arial);
 	LoadAsObjText.setFillColor(sf::Color::Black);
 	LoadAsObjText.setCharacterSize(24);
 	LoadAsObjText.setString("Load as object");
-	LoadAsObjText.setPosition(LoadAsObject.getPosition() + sf::Vector2f(0, 10));
+	LoadAsObjText.setPosition(LoadAsObject.getPosition() + sf::Vector2f(25, 10));
 
 	LoadAsTemplate.setSize(sf::Vector2f(215, 50));
-	LoadAsTemplate.setFillColor(sf::Color(4, 232, 36));
+	LoadAsTemplate.setFillColor(sf::Color(13, 0, 164));
 	LoadAsTemplate.setPosition(sf::Vector2f(Loadbg.getPosition() + sf::Vector2f(10, -120)));
 
 	LoadAsTempText.setFont(arial);
@@ -317,15 +378,11 @@ void Menu::display()
 	window->draw(save);
 	window->draw(Load);
 	
-	if (isLoading) {
-		std::vector<std::string> paths = getFiles(".\\LogicGateSim\\Saves");
-		for (std::string s : paths) {
-			std::string name = nameFromPath(s, ".json");
-			std::cout << name << std::endl;
-		}
+	if (isLoading && !loadTemp) displayLoadMenu();
+	else if (loadTemp) {
+		displayLoadTemp();
 	}
-
-	if (isAdding) displayAddMenu();
+	else if (isAdding) displayAddMenu();
 	else if (isSaving && !istemplate) {
 		displaySaveMenu();
 	}

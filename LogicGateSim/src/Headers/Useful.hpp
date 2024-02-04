@@ -1,6 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <filesystem>
+#include <Windows.h>
 #include "Common.hpp"
 
 // Set up FPS display
@@ -13,3 +14,7 @@ void setupWindow();
 std::vector<std::string> getFiles(std::string path);
 // Converts a path to the file name
 std::string nameFromPath(std::string path, std::string fileExtension);
+// Show cmd window
+void showConsole();
+// Hide cmd window
+void hideConsole();

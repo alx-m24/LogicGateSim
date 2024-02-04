@@ -29,4 +29,5 @@ public:
 
 	void load(std::string Name);
 	void save(std::string Name);
+	void clearAll();
 };

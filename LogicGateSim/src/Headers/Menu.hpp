@@ -47,7 +47,6 @@ private:
 	sf::Sprite Load;
 	sf::Texture LoadTex;
 	sf::Vector2f bgPos;
-	bool isLoading = false;
 
 	Saver* mysave;
 
@@ -55,6 +54,8 @@ private:
 	void displayAddMenu();
 	void menuObjs();
 	void displaySaveMenu();
+	void displayLoadMenu();
+	void displayLoadTemp();
 	// setups
 	void setupSaveMenu();
 	void setupLoadMenu();
@@ -67,5 +68,6 @@ public:
 	void resetMenu();
 
 	bool isAdding = false;
-	bool isSaving = false, istemplate = false;
+	bool isLoading = false;
+	bool isSaving = false, istemplate = false, loadTemp = false;
 };

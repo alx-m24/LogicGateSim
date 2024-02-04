@@ -34,6 +34,7 @@ int main() {
 	sf::RenderWindow Mainwindow(sf::VideoMode(800, 600), "Logic Gate Sim", sf::Style::Default, settings);
 	window = &Mainwindow;
 	setupWindow();
+	hideConsole();
 	// my main loop class
 	Loop loop(&save);
 
