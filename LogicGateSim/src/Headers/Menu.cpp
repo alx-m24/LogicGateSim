@@ -268,15 +268,21 @@ void Menu::displayLoadTemp()
 		optiontext.setCharacterSize(48);
 		optiontext.setString(name);
 
-		if (left && !lastleft && Option.getGlobalBounds().contains(sf::Vector2f(sf::Mouse::getPosition(*window)))) {
-			Option.setFillColor(sf::Color(35, 47, 84));
-			Option.setOutlineColor(sf::Color(23, 29, 46));
+		if (Option.getGlobalBounds().contains(sf::Vector2f(sf::Mouse::getPosition(*window)))) {
+			if (left) {
+				Option.setFillColor(sf::Color(35, 47, 84));
+				Option.setOutlineColor(sf::Color(23, 29, 46));
+			}
+			else if (lastleft) {
+				this->loadTemp = false;
+				this->isAdding = false;
+				this->isLoading = false;
+				this->istemplate = false;
 
-			loadTemp = false;
-
-			Saver saver;
-			saver.clearAll();
-			saver.load(name);
+				Saver saver;
+				saver.clearAll();
+				saver.load(name);
+			}
 		}
 
 		window->draw(Option);
