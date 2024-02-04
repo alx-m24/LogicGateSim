@@ -190,8 +190,8 @@ void Loop::Input() {
 				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::LControl) || sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::RControl)) save->save("recovery"); //save->save("test");
 				break;
 			}
-			case sf::Keyboard::Scancode::L: {
-				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::LControl) || sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::RControl)) save->load("recovery");
+			case sf::Keyboard::Scancode::C: {
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::LControl) || sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::RControl)) save->clearAll();
 				break;
 			}
 			default:

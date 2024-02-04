@@ -38,6 +38,9 @@ int main() {
 	// my main loop class
 	Loop loop(&save);
 
+	// Recovery
+	save.load("recovery");
+
 	sf::Text fpsText;
 	setupfps(&fpsText);
 
