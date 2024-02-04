@@ -2,7 +2,7 @@
 
 Node::Node(sf::Vector2f pos, Type NodeType)
 {
-	tex.loadFromFile("C:\\Users\\alexa\\Coding\\C++\\LogicGateSim\\LogicGateSim\\Resources\\Node.png");
+	tex.loadFromFile(".\\Resources\\Node.png");
 	tex.generateMipmap();
 	tex.setSmooth(true);
 

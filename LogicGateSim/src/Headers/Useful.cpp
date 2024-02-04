@@ -24,7 +24,7 @@ void setupWindow()
 	window->setVerticalSyncEnabled(true);
 
 	sf::Image icon;
-	icon.loadFromFile("C:\\Users\\alexa\\Coding\\C++\\LogicGateSim\\LogicGateSim\\Resources\\Icon.png");
+	icon.loadFromFile(".\\Resources\\Icon.png");
 	window->setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
 
 	arial.loadFromFile("C:/Windows/Fonts/arial.ttf");

@@ -179,7 +179,7 @@ Saver::~Saver()
 
 void Saver::load(std::string Name)
 {
-	std::string path = "C:\\Users\\alexa\\Coding\\C++\\LogicGateSim\\LogicGateSim\\Saves\\" + Name + ".json";
+	std::string path = ".\\Saves\\" + Name + ".json";
 
 	closeFile(f);
 
@@ -206,7 +206,7 @@ void Saver::load(std::string Name)
 
 void Saver::save(std::string Name)
 {
-	fopen_s(&f, std::string("C:\\Users\\alexa\\Coding\\C++\\LogicGateSim\\LogicGateSim\\Saves\\" + Name + ".json").c_str(), "w");
+	fopen_s(&f, std::string(".\\Saves\\" + Name + ".json").c_str(), "w");
 	read();
 
 	if (d.ObjectEmpty()) loadTemplate();

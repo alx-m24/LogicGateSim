@@ -30,11 +30,11 @@ void InputField::textIn()
 
 InputField::InputField(bool* isSaving, bool* isTemp)
 {
-	acceptButtonTex.loadFromFile("C:\\Users\\alexa\\Coding\\C++\\LogicGateSim\\LogicGateSim\\Resources\\Accept.png");
+	acceptButtonTex.loadFromFile(".\\Resources\\Accept.png");
 	acceptButtonTex.setSmooth(true);
 	acceptButtonTex.generateMipmap();
 
-	cancelButtonTex.loadFromFile("C:\\Users\\alexa\\Coding\\C++\\LogicGateSim\\LogicGateSim\\Resources\\Cancel.png");
+	cancelButtonTex.loadFromFile(".\\Resources\\Cancel.png");
 	cancelButtonTex.setSmooth(true);
 	cancelButtonTex.generateMipmap();
 
@@ -45,7 +45,7 @@ InputField::InputField(bool* isSaving, bool* isTemp)
 	cancelButton.setScale(0.2f, 0.2f);;
 	cancelButton.setPosition(sf::Vector2f((window->getSize().x / 2) + 50,  (window->getSize().y / 2) + 100));
 
-	inputFieldTex.loadFromFile("C:\\Users\\alexa\\Coding\\C++\\LogicGateSim\\LogicGateSim\\Resources\\InputField.png");
+	inputFieldTex.loadFromFile(".\\Resources\\InputField.png");
 	inputFieldTex.setSmooth(true);
 	inputfield.setTexture(inputFieldTex);
 	inputfield.setOrigin(sf::Vector2f(inputFieldTex.getSize()) / 2.0f);

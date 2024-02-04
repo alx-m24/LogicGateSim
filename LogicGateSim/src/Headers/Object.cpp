@@ -25,7 +25,7 @@ void Object::ConnectorPos(int InputNum, int OutputNum, sf::Vector2f pos)
 
 Object::Object(std::string pathToTex, sf::Vector2f pos, unsigned int InputNum, unsigned int OutputNum, std::string Name) : name(Name)
 {
-	pathToTex = (pathToTex != "" && pathToTex != " ") ? pathToTex : "C:\\Users\\alexa\\Coding\\C++\\LogicGateSim\\LogicGateSim\\Resources\\Custom.png";
+	pathToTex = (pathToTex != "" && pathToTex != " ") ? pathToTex : ".\\Resources\\Custom.png";
 
 	tex.loadFromFile(pathToTex);
 	tex.generateMipmap();

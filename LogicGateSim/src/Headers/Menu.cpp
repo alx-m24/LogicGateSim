@@ -7,7 +7,7 @@ Menu::Menu(Saver* Mysave) : mysave(Mysave)
 
 	sf::Vector2u winSize = window->getSize();
 
-	addItemTex.loadFromFile("C:\\Users\\alexa\\Coding\\C++\\LogicGateSim\\LogicGateSim\\Resources\\AddItem.png");
+	addItemTex.loadFromFile(".\\Resources\\AddItem.png");
 	addItemTex.setSmooth(true);
 
 	sf::Vector2f texSize = sf::Vector2f(addItemTex.getSize());
@@ -20,13 +20,13 @@ Menu::Menu(Saver* Mysave) : mysave(Mysave)
 	thisSize = { texSize.x * thisScale.x, texSize.y * thisScale.y };
 	addItem.setPosition(winSize.x - (thisSize.x / 2), winSize.y - (thisSize.y / 2));
 
-	saveTex.loadFromFile("C:\\Users\\alexa\\Coding\\C++\\LogicGateSim\\LogicGateSim\\Resources\\save.png");
+	saveTex.loadFromFile(".\\Resources\\save.png");
 	saveTex.setSmooth(true);
 	save.setTexture(saveTex);
 	save.setPosition(0, winSize.y - save.getTexture()->getSize().y * save.getScale().y);
 	save.scale(0.15f, 0.15f);
 
-	LoadTex.loadFromFile("C:\\Users\\alexa\\Coding\\C++\\LogicGateSim\\LogicGateSim\\Resources\\Load.png");
+	LoadTex.loadFromFile(".\\Resources\\Load.png");
 	LoadTex.setSmooth(true);
 	Load.setTexture(LoadTex);
 	Load.setPosition(128, winSize.y - Load.getTexture()->getSize().y * Load.getScale().y - 1);
@@ -318,7 +318,7 @@ void Menu::display()
 	window->draw(Load);
 	
 	if (isLoading) {
-		std::vector<std::string> paths = getFiles("C:\\Users\\alexa\\Coding\\C++\\LogicGateSim\\LogicGateSim\\Saves");
+		std::vector<std::string> paths = getFiles(".\\LogicGateSim\\Saves");
 		for (std::string s : paths) {
 			std::string name = nameFromPath(s, ".json");
 			std::cout << name << std::endl;

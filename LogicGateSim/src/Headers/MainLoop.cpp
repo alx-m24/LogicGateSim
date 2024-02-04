@@ -9,7 +9,7 @@ Loop::Loop(Saver* Saver) : save(Saver)
 
 void Loop::loadWireTextures()
 {
-	addWireTex.loadFromFile("C:\\Users\\alexa\\Coding\\C++\\LogicGateSim\\LogicGateSim\\Resources\\AddWire.png");
+	addWireTex.loadFromFile(".\\Resources\\AddWire.png");
 	addWireTex.generateMipmap();
 	addWireTex.setSmooth(true);
 
