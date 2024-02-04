@@ -15,12 +15,12 @@ dc5f5"/>
 
 Use the add button to start adding gates. When done, you can save them using the save as template option in the save menu (Just type the name of your choice and your done!). 
 
-<b><u>Note</u></b>: Unfortunately, for the moment, you are not able to load saved gates from the game itself. I am working on it and I assure you that it will soon be possible.
-
 - To <b>drag</b> gates and nodes, just <b>left click</b> on them and move the mouse.
 - To <b>add wires</b>, <b>middle click</b> from any node/object to any other node/objects.
 - To <b>delete wires</b>, <b>middle click</b> on them.
 - To <b>change the state of a Node</b>, <b>right click</b> on it.
+- <b>Ctrl+S</b> to save as recovery.
+- To <b>Clear/Delete everything</b>, use <b>Ctrl+C</b>.
 - To <b>delete gates</b>, hover on them and press:
   - <b>DELETE</b>
   or
