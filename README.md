@@ -1,8 +1,7 @@
 # Logic Gate Sim
 
 <p align="center">
-    <img src = "https://github.com/alx-m24/LogicGateSim/assets/156537084/26b7de9c-1530-4ef7-ae41-6983689eef62"
-dc5f5"/>
+    <img src = "https://github.com/alx-m24/LogicGateSim/assets/156537084/78c2231e-cae4-4f4c-8167-af9360153a20"/>
 </p>
 
 <p align="center">
@@ -15,12 +14,12 @@ dc5f5"/>
 
 Use the add button to start adding gates. When done, you can save them using the save as template option in the save menu (Just type the name of your choice and your done!). 
 
-<b><u>Note</u></b>: Unfortunately, for the moment, you are not able to load saved gates from the game itself. I am working on it and I assure you that it will soon be possible.
-
 - To <b>drag</b> gates and nodes, just <b>left click</b> on them and move the mouse.
 - To <b>add wires</b>, <b>middle click</b> from any node/object to any other node/objects.
 - To <b>delete wires</b>, <b>middle click</b> on them.
 - To <b>change the state of a Node</b>, <b>right click</b> on it.
+- <b>Ctrl+S</b> to save as recovery.
+- To <b>Clear/Delete everything</b>, use <b>Ctrl+C</b>.
 - To <b>delete gates</b>, hover on them and press:
   - <b>DELETE</b>
   or
