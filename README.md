@@ -1,8 +1,7 @@
 # Logic Gate Sim
 
 <p align="center">
-    <img src = "https://github.com/alx-m24/LogicGateSim/assets/156537084/26b7de9c-1530-4ef7-ae41-6983689eef62"
-dc5f5"/>
+    <img src = "https://github.com/alx-m24/LogicGateSim/assets/156537084/78c2231e-cae4-4f4c-8167-af9360153a20"/>
 </p>
 
 <p align="center">
