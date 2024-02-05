@@ -51,6 +51,8 @@ void Menu::resetAddItemPos()
 	save.setPosition(0, winSize.y - save.getTexture()->getSize().y * save.getScale().y);
 	Load.setPosition(128, winSize.y - Load.getTexture()->getSize().y * Load.getScale().y - 1);
 
+	menuObjs();
+
 	i->scale();
 }
 
@@ -60,7 +62,7 @@ void Menu::displayAddMenu()
 	Bg.setSize(sf::Vector2f(400, 400));
 	Bg.setOrigin(400, 0);
 	Bg.setFillColor(sf::Color(7, 11, 43, 255));
-	bgPos = { this->addItem.getPosition().x + (thisSize.x / 2), this->addItem.getPosition().y - (thisSize.y / 2) };
+	bgPos = { addItem.getPosition().x + (thisSize.x / 2), addItem.getPosition().y - (thisSize.y / 2) };
 	Bg.setPosition(bgPos);
 
 	const sf::Vector2f mousePos = sf::Vector2f(sf::Mouse::getPosition(*window));
@@ -118,10 +120,11 @@ void Menu::menuObjs()
 	const int alpha = 255;
 	sf::Color transRed = { 255, 0, 0, alpha };
 	sf::Color transWhite = { 255, 255, 255, alpha };
+	sf::Vector2f Pos = { addItem.getPosition().x + (thisSize.x / 2), addItem.getPosition().y - (thisSize.y / 2) };
 
 	inNode.setRadius(25);
 	inNode.setOrigin(25, 25);
-	inNode.setPosition(bgPos + sf::Vector2f(-100, 30));
+	inNode.setPosition(Pos + sf::Vector2f(-100, 30));
 	inNode.setFillColor(transWhite);
 
 	nodeText.setFont(arial);
@@ -133,7 +136,7 @@ void Menu::menuObjs()
 
 	outNode.setRadius(25);
 	outNode.setOrigin(25, 25);
-	outNode.setPosition(bgPos + sf::Vector2f(-285, 30));
+	outNode.setPosition(Pos + sf::Vector2f(-285, 30));
 	outNode.setFillColor(transWhite);
 
 	outnodeText.setFont(arial);
