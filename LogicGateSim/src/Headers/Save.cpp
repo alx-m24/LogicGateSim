@@ -15,7 +15,7 @@ void Saver::read()
 	}
 }
 
-void Saver::loadNodes()
+void Saver::loadNodes(bool custom)
 {
 	int n = d["NodeNum"].GetInt();
 	rapidjson::Value& Nodes = d["nodes"];
@@ -23,16 +23,20 @@ void Saver::loadNodes()
 	{
 		rapidjson::Value& node = Nodes[i];
 		std::string type = node["type"].GetString();
+
 		if (type == "input") {
 			nodes.push_back(new Node(sf::Vector2f(node["posX"].GetInt(), node["posY"].GetInt()), Node::Input));
 		}
 		else if (type == "output") {
 			nodes.push_back(new Node(sf::Vector2f(node["posX"].GetInt(), node["posY"].GetInt()), Node::Output));
 		}
+
+		nodes[i]->custom = node["custom"].GetBool();
+		if (custom) nodes[i]->custom = custom;
 	}
 }
 
-void Saver::loadWires()
+void Saver::loadWires(bool custom)
 {
 	int n = d["WireNum"].GetInt();
 	rapidjson::Value& JSONwires = d["wires"];
@@ -49,6 +53,9 @@ void Saver::loadWires()
 		newWire->inputIndex = w["inputIndex"].GetInt();
 		newWire->outputIndex = w["outputIndex"].GetInt();
 
+		newWire->custom = w["custom"].GetBool();
+		if (custom) newWire->custom = custom;
+
 		if (newWire->inNodeIdx > -1) newWire->inputNode = nodes[newWire->inNodeIdx];
 		if (newWire->outNodeIdx > -1) newWire->outputNode = nodes[newWire->outNodeIdx];
 		if (newWire->inObjIdx > -1) newWire->inputObj = objects[newWire->inObjIdx];
@@ -58,7 +65,7 @@ void Saver::loadWires()
 	}
 }
 
-void Saver::loadObjs()
+void Saver::loadObjs(bool custom)
 {
 	int n = d["Objnum"].GetInt();
 	rapidjson::Value& objs = d["objects"];
@@ -75,6 +82,9 @@ void Saver::loadObjs()
 		else if (name == "orGate") {
 			objects.push_back(new OrGate(sf::Vector2f(obj["posX"].GetInt(), obj["posY"].GetInt())));
 		}
+
+		objects[i]->custom = obj["custom"].GetBool();
+		if (custom) objects[i]->custom = custom;
 	}
 }
 
@@ -100,6 +110,7 @@ void Saver::saveNodes()
 		else if (n->type == Node::Output) nS.AddMember("type", "output", d.GetAllocator());
 		nS.AddMember("posX", (int)n->getPosition().x, d.GetAllocator());
 		nS.AddMember("posY", (int)n->getPosition().y, d.GetAllocator());
+		nS.AddMember("custom", n->custom, d.GetAllocator());
 
 		Nodes.PushBack(nS, d.GetAllocator());
 	}
@@ -127,6 +138,7 @@ void Saver::saveWires()
 		w.AddMember("outputObjIdx", wire->outObjIdx, d.GetAllocator());
 		w.AddMember("inputIndex", wire->inputIndex, d.GetAllocator());
 		w.AddMember("outputIndex", wire->outputIndex, d.GetAllocator());
+		w.AddMember("custom", wire->custom, d.GetAllocator());
 
 		wS.PushBack(w, d.GetAllocator());
 	}
@@ -156,6 +168,7 @@ void Saver::saveObjs()
 		else if (name == "andGate") oS.AddMember("name", "andGate", d.GetAllocator());
 		oS.AddMember("posX", (int)o->getPosition().x, d.GetAllocator());
 		oS.AddMember("posY", (int)o->getPosition().y, d.GetAllocator());
+		oS.AddMember("custom", o->custom, d.GetAllocator());
 
 		objs.PushBack(oS, d.GetAllocator());
 	}
@@ -173,11 +186,11 @@ void Saver::loadTemplate()
 
 Saver::~Saver()
 {
-	save("recovery");
+	//save("recovery", false);
 	closeFile(f);
 }
 
-void Saver::load(std::string Name)
+void Saver::load(std::string Name, bool custom)
 {
 	std::string path = ".\\Saves\\" + Name + ".json";
 
@@ -193,23 +206,30 @@ void Saver::load(std::string Name)
 	for (Wire* w : wires) delete w;
 	wires.clear();
 
-	loadObjs();
+	loadObjs(custom);
 
-	loadNodes();
+	loadNodes(custom);
 
-	loadWires();
+	loadWires(custom);
 
-	std::cout << "Finished loading" << std::endl;
+	//std::cout << "Finished loading" << std::endl;
 
 	closeFile(f);
 }
 
-void Saver::save(std::string Name)
+void Saver::save(std::string Name, bool custom)
 {
-	fopen_s(&f, std::string(".\\Saves\\" + Name + ".json").c_str(), "w");
+	std::string filePath = custom ? ".\\Saves\\Custom\\" + Name : ".\\Saves\\" + Name;
+	fopen_s(&f, std::string(filePath + ".json").c_str(), "w");
 	read();
 
 	if (d.ObjectEmpty()) loadTemplate();
+
+	if (custom) {
+		for (Object* obj : objects) obj->custom = custom;
+		for (Node* n : nodes) n->custom = custom;
+		for (Wire* w : wires) w->custom = custom;
+	}
 
 	// Modify the JSON data
 	saveObjs();

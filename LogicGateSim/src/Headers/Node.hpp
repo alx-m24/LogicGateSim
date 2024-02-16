@@ -15,6 +15,7 @@ public:
 
 	Type type;
 	bool state;
+	bool custom = false;
 	bool input;
 	bool lastRight = false, lastMid = false, moving = false;
 };

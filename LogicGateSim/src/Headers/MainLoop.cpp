@@ -24,55 +24,60 @@ void Loop::updateObjs()
 	int idx = 0;
 	for (Object* obj : objects)
 	{
-		bool hover = obj->getGlobalBounds().contains(mousePos);
-		if (hover) {
-			if (left && !moving) { obj->moving = true; moving = true; }
-			else if (!menu->isSaving && (sf::Keyboard::isKeyPressed(sf::Keyboard::BackSpace) || sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Delete))) {
-				oDelete.insert(idx);
-			}
-			else if (middle && !obj->lastMid) {
-				if (addWire) {
-					for (int i = 0; i < obj->Inconnectors.size(); ++i)
-					{
-						if (obj->Inconnectors[i]->getGlobalBounds().contains(mousePos))
-						{
-							Wire* w = wires[wires.size() - 1];
-							w->outputObj = obj;
-							w->inputIndex = i;
-							w->outObjIdx = idx;
-							addWire = !addWire;
-						}
-					}
-				}
-				else {
-					for (int i = 0; i < obj->Outconnectors.size(); ++i)
-					{
-						if (obj->Outconnectors[i]->getGlobalBounds().contains(mousePos))
-						{
-							Wire* w = new Wire;
-							(*w)[0].position = obj->Outconnectors[i]->getPosition();
-							(*w)[1].position = obj->Outconnectors[i]->getPosition();
-							w->inputObj = obj;
-							w->outputIndex = i;
-							w->inObjIdx = idx;
-							wires.push_back(w);
-							addWire = !addWire;
-						}
-					}
-				}
-			}
-		}
-		if (!left && lastleft && obj->moving) { obj->moving = false; moving = false; }
-		else {
-			if (obj->moving) {
-				obj->setPosition(mousePos);
-				moveConnectors(obj);
-				obj->setColor(sf::Color(167, 167, 167));
-			}
-			else obj->setColor(sf::Color::White);
-		}
+		if (!obj->custom) {
 
-		obj->lastMid = middle;
+			bool hover = obj->getGlobalBounds().contains(mousePos);
+			if (hover) {
+				if (left && !moving) { obj->moving = true; moving = true; }
+				else if (!menu->m_isSaving && !menu->isObj && (sf::Keyboard::isKeyPressed(sf::Keyboard::BackSpace) || sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Delete))) {
+					oDelete.insert(idx);
+
+					for (int i = 0; i < wires.size(); ++i) {
+						Wire* temp = wires[i];
+
+						if (temp->outObjIdx == idx || temp->inObjIdx == idx) wDelete.insert(i);
+					}
+				}
+				else if (middle && !obj->lastMid) {
+					if (addWire) {
+						for (int i = 0; i < obj->Inconnectors.size(); ++i) {
+							if (obj->Inconnectors[i]->getGlobalBounds().contains(mousePos)) {
+								Wire* w = wires[wires.size() - 1];
+								w->outputObj = obj;
+								w->inputIndex = i;
+								w->outObjIdx = idx;
+								addWire = !addWire;
+							}
+						}
+					}
+					else {
+						for (int i = 0; i < obj->Outconnectors.size(); ++i) {
+							if (obj->Outconnectors[i]->getGlobalBounds().contains(mousePos)) {
+								Wire* w = new Wire;
+								(*w)[0].position = obj->Outconnectors[i]->getPosition();
+								(*w)[1].position = obj->Outconnectors[i]->getPosition();
+								w->inputObj = obj;
+								w->outputIndex = i;
+								w->inObjIdx = idx;
+								wires.push_back(w);
+								addWire = !addWire;
+							}
+						}
+					}
+				}
+			}
+			if (!left && lastleft && obj->moving) { obj->moving = false; moving = false; }
+			else {
+				if (obj->moving) {
+					obj->setPosition(mousePos);
+					moveConnectors(obj);
+					obj->setColor(sf::Color(167, 167, 167));
+				}
+				else obj->setColor(sf::Color::White);
+			}
+
+			obj->lastMid = middle;
+		}
 		++idx;
 	}
 }
@@ -82,48 +87,56 @@ void Loop::updateNodes()
 	int idx = 0;
 	for (Node* n : nodes)
 	{
-		bool hover = n->getGlobalBounds().contains(mousePos);
+		if (!n->custom) {
 
-		if (!moving && hover) {
-			if (left) { moving = true; n->moving = true; }
-			if (right && !n->lastRight && n->type == Node::Input) {
-				n->state = !n->state;
-				addWire = false;
-			}
-			else if (!menu->isSaving && (sf::Keyboard::isKeyPressed(sf::Keyboard::BackSpace) || sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Delete))) {
+			bool hover = n->getGlobalBounds().contains(mousePos);
 
-				nDelete.insert(idx);
-			}
-			else if (middle && !n->lastMid) {
-				if (addWire) {
-					Wire* w = wires[wires.size() - 1];
-					if (n->type == Node::Output) { { w->outputNode = n; w->outNodeIdx = idx; } }
+			if (!moving && hover) {
+				if (left) { moving = true; n->moving = true; }
+				if (right && !n->lastRight && n->type == Node::Input) {
+					n->state = !n->state;
+					addWire = false;
+				}
+				else if (!menu->m_isSaving && !menu->isObj && (sf::Keyboard::isKeyPressed(sf::Keyboard::BackSpace) || sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Delete))) {
+					nDelete.insert(idx);
+
+					for (int i = 0; i < wires.size(); ++i) {
+						Wire* temp = wires[i];
+
+						if (temp->inNodeIdx == idx || temp->outNodeIdx == idx) wDelete.insert(i);
+					}
+				}
+				else if (middle && !n->lastMid) {
+					if (addWire) {
+						Wire* w = wires[wires.size() - 1];
+						if (n->type == Node::Output) { { w->outputNode = n; w->outNodeIdx = idx; } }
+						else {
+							auto it = std::find(wires.begin(), wires.end(), w);
+							if (it != wires.end()) wires.erase(it);
+						}
+					}
 					else {
-						auto it = std::find(wires.begin(), wires.end(), w);
-						if (it != wires.end()) wires.erase(it);
+						if (n->type == Node::Input) {
+							Wire* w = new Wire;
+							(*w)[0].position = n->getPosition();
+							(*w)[1].position = n->getPosition();
+							w->inputNode = n;
+							w->inNodeIdx = idx;
+							wires.push_back(w);
+						}
+						else addWire = true;
 					}
+					addWire = !addWire;
 				}
-				else {
-					if (n->type == Node::Input) {
-						Wire* w = new Wire;
-						(*w)[0].position = n->getPosition();
-						(*w)[1].position = n->getPosition();
-						w->inputNode = n;
-						w->inNodeIdx = idx;
-						wires.push_back(w);
-					}
-					else addWire = true;
-				}
-				addWire = !addWire;
 			}
+
+			if (!left && lastleft && n->moving) { n->moving = false; moving = false; }
+			else if (n->moving) n->setPosition(mousePos);
+
+
+			n->lastMid = middle;
+			n->lastRight = right;
 		}
-		
-		if (!left && lastleft && n->moving) { n->moving = false; moving = false; }
-		else if (n->moving) n->setPosition(mousePos);
-
-
-		n->lastMid = middle;
-		n->lastRight = right;
 		++idx;
 	}
 }
@@ -179,15 +192,17 @@ void Loop::Input() {
 			currKey = sf::Keyboard::getDescription(event.key.scancode);
 			switch (event.key.scancode) {
 			case sf::Keyboard::Scancode::Escape: {
-				menu->isAdding = false;
-				menu->isSaving = false;
+				menu->m_isAdding = false;
+				menu->m_isSaving = false;
 				menu->istemplate = false;
 				menu->loadTemp = false;
-				menu->isLoading = false;
+				menu->m_isLoading = false;
+				menu->isObj = false;
+				menu->loadObj = false;
 				break;
 			}
 			case sf::Keyboard::Scancode::S: {
-				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::LControl) || sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::RControl)) save->save("recovery"); //save->save("test");
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::LControl) || sf::Keyboard::isKeyPressed(sf::Keyboard::Scancode::RControl)) save->save("recovery", false); //save->save("test");
 				break;
 			}
 			case sf::Keyboard::Scancode::C: {
@@ -223,25 +238,27 @@ void Loop::Update()
 
 	sf::Color curr;
 	int alpha = 255;
-	if (menu->isAdding || menu->isSaving || menu->istemplate || menu->isLoading || menu->loadTemp) alpha = 50;
+	if (menu->m_isAdding || menu->m_isSaving || menu->istemplate || menu->m_isLoading || menu->loadTemp|| menu->isObj || menu->loadObj) alpha = 50;
 
 	int i = 0;
 	for (Wire* w : wires) {
 		bool hover = w->getBounds().contains(mousePos);
 		bool mid = sf::Mouse::isButtonPressed(sf::Mouse::Middle);
 
-		if (hover && mid && !w->lastMid) {
+		if (!w->custom && !menu->isObj && hover && ((mid && !w->lastMid) || (sf::Keyboard::isKeyPressed(sf::Keyboard::BackSpace) || sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Delete)))) {
 			wDelete.insert(i);
 		}
 		else {
 			w->updateWire();
 
-			curr = (*w)[0].color;
-			(*w)[0].color = sf::Color(curr.r, curr.g, curr.b, alpha);
-			curr = (*w)[1].color;
-			(*w)[1].color = sf::Color(curr.r, curr.g, curr.b, alpha);
+			if (!w->custom) {
+				curr = (*w)[0].color;
+				(*w)[0].color = sf::Color(curr.r, curr.g, curr.b, alpha);
+				curr = (*w)[1].color;
+				(*w)[1].color = sf::Color(curr.r, curr.g, curr.b, alpha);
 
-			window->draw(*w);
+				window->draw(*w);
+			}
 		}
 		++i;
 		w->lastMid = mid;
