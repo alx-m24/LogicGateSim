@@ -21,8 +21,6 @@ public:
 	bool state = false;
 	bool lastMid = false;
 
-	bool custom = false;
-
 	int inputIndex = -1;
 	int outputIndex = -1;
 

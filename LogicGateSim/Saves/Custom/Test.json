@@ -1,1 +1,0 @@
-{"Objnum":0,"objects":[],"NodeNum":2,"nodes":[{"type":"input","posX":306,"posY":124,"custom":true},{"type":"output","posX":611,"posY":282,"custom":true}],"WireNum":1,"wires":[{"inputNodeIdx":0,"outputNodeIdx":1,"inputObjIdx":-1,"outputObjIdx":-1,"inputIndex":-1,"outputIndex":-1,"custom":true}]}

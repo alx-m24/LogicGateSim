@@ -9,7 +9,6 @@ class InputField {
 private:
 	bool* IsSaving;
 	bool* istemp;
-	bool* IsObj;
 	bool toUp = false;
 
 	sf::Sprite acceptButton;
@@ -27,7 +26,7 @@ private:
 	void textIn();
 public:
 	//InputField(Save* Saver, bool* isSaving);
-	InputField(bool* isSaving, bool* isTemp, bool* isObj);
+	InputField(bool* isSaving, bool* isTemp);
 
 	std::string update();
 	void draw();

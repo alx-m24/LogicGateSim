@@ -16,9 +16,9 @@ private:
 	void closeFile(FILE* f);
 	void read();
 
-	void loadNodes(bool custom);
-	void loadWires(bool custom);
-	void loadObjs(bool custom);
+	void loadNodes();
+	void loadWires();
+	void loadObjs();
 	void saveNodes();
 	void saveWires();
 	void saveObjs();
@@ -27,7 +27,7 @@ public:
 	Saver() = default;
 	~Saver();
 
-	void load(std::string Name, bool custom);
-	void save(std::string Name, bool custom);
+	void load(std::string Name);
+	void save(std::string Name);
 	void clearAll();
 };

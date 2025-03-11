@@ -28,7 +28,7 @@ void InputField::textIn()
 	}
 }
 
-InputField::InputField(bool* isSaving, bool* isTemp, bool* isObj)
+InputField::InputField(bool* isSaving, bool* isTemp)
 {
 	acceptButtonTex.loadFromFile(".\\Resources\\Accept.png");
 	acceptButtonTex.setSmooth(true);
@@ -63,7 +63,6 @@ InputField::InputField(bool* isSaving, bool* isTemp, bool* isObj)
 	//mysave = saver;
 	IsSaving = isSaving;
 	istemp = isTemp;
-	IsObj = isObj;
 }
 
 std::string InputField::update()
@@ -77,7 +76,6 @@ std::string InputField::update()
 				//mysave->save(std::string(text));
 				*IsSaving = false;
 				*istemp = false;
-				*IsObj = false;
 				return text;
 			}
 		}
@@ -85,7 +83,6 @@ std::string InputField::update()
 			cancelButton.setColor(sf::Color::White);
 			*IsSaving = false;
 			*istemp = false;
-			*IsObj = false;
 			return "";
 		}
 	}

@@ -1,1 +1,0 @@
-{"Objnum":1,"objects":[{"name":"andGate","posX":222,"posY":355,"custom":false}],"NodeNum":2,"nodes":[{"type":"input","posX":306,"posY":124,"custom":false},{"type":"output","posX":611,"posY":282,"custom":false}],"WireNum":1,"wires":[{"inputNodeIdx":0,"outputNodeIdx":1,"inputObjIdx":-1,"outputObjIdx":-1,"inputIndex":-1,"outputIndex":-1,"custom":false}]}

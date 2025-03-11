@@ -1,13 +1,13 @@
 #pragma once
-#include "Common.hpp"
+#include <SFML/Graphics.hpp>
+#include <filesystem>
+#include <iostream>
+#include <sys/stat.h>
 #include "Gates.hpp"
+#include "Common.hpp"
 #include "Node.hpp"
 #include "Save.hpp"
 #include "Useful.hpp"
-#include <filesystem>
-#include <iostream>
-#include <SFML/Graphics.hpp>
-//#include <sys/stat.h>
 
 class Menu {
 private:
@@ -56,13 +56,9 @@ private:
 	void displaySaveMenu();
 	void displayLoadMenu();
 	void displayLoadTemp();
-	void displayLoadObj();
 	// setups
 	void setupSaveMenu();
 	void setupLoadMenu();
-	// Custom objs
-	void loadAsObj();
-	void saveAsObj();
 public:
 	// Construct
 	Menu(Saver* Mysave);
@@ -71,7 +67,7 @@ public:
 	void display();
 	void resetMenu();
 
-	bool m_isAdding = false;
-	bool m_isLoading = false;
-	bool m_isSaving = false, istemplate = false, loadTemp = false, isObj = false, loadObj = false;
+	bool isAdding = false;
+	bool isLoading = false;
+	bool isSaving = false, istemplate = false, loadTemp = false;
 };

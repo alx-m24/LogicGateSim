@@ -39,7 +39,7 @@ int main() {
 	Loop loop(&save);
 
 	// Recovery
-	save.load("recovery", false);
+	save.load("recovery");
 
 	sf::Text fpsText;
 	setupfps(&fpsText);
@@ -61,8 +61,6 @@ int main() {
 		window->draw(fpsText);
 		loop.Render();
 	}
-
-	save.save("recovery", false);
 
 	return EXIT_SUCCESS;
 }

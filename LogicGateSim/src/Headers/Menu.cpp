@@ -3,7 +3,7 @@
 Menu::Menu(Saver* Mysave) : mysave(Mysave)
 {
 	//i = new InputField(Mysave, &isSaving);
-	i = new InputField(&m_isSaving, &istemplate, &isObj);
+	i = new InputField(&isSaving, &istemplate);
 
 	sf::Vector2u winSize = window->getSize();
 
@@ -68,7 +68,7 @@ void Menu::displayAddMenu()
 	const sf::Vector2f mousePos = sf::Vector2f(sf::Mouse::getPosition(*window));
 
 	if (!Bg.getGlobalBounds().contains(mousePos)) {
-		m_isAdding = false;
+		isAdding = false;
 		return;
 	}
 
@@ -191,14 +191,14 @@ void Menu::displaySaveMenu()
 	saveAsTemplate.setFillColor(sf::Color(4, 232, 36));
 
 	if (!SaveBg.getGlobalBounds().contains(mousePos)) {
-		m_isSaving = false;
+		isSaving = false;
 	}
 	else {
 		if (saveAsObject.getGlobalBounds().contains(mousePos)) {
 			if (left) {
 				saveAsObject.setFillColor(sf::Color(52, 64, 58));
+				if (!lastleft) std::cout << "Save as obj" << std::endl;
 			}
-			else if (lastleft) saveAsObj();
 		}
 		else if (saveAsTemplate.getGlobalBounds().contains(mousePos)) {
 			if (left) {
@@ -223,14 +223,14 @@ void Menu::displayLoadMenu()
 	LoadAsTemplate.setFillColor(sf::Color(34, 0, 124));
 
 	if (!Loadbg.getGlobalBounds().contains(mousePos)) {
-		m_isLoading = false;
+		isLoading = false;
 	}
 	else {
 		if (LoadAsObject.getGlobalBounds().contains(mousePos)) {
 			if (left) {
 				LoadAsObject.setFillColor(sf::Color(52, 64, 58));
+				if (!lastleft) std::cout << "Load as obj" << std::endl;
 			}
-			else if (!lastleft) loadAsObj();
 		}
 		else if (LoadAsTemplate.getGlobalBounds().contains(mousePos)) {
 			if (left) {
@@ -278,68 +278,13 @@ void Menu::displayLoadTemp()
 			}
 			else if (lastleft) {
 				this->loadTemp = false;
-				this->m_isAdding = false;
-				this->m_isLoading = false;
+				this->isAdding = false;
+				this->isLoading = false;
 				this->istemplate = false;
-				this->isObj = false;
-				this->loadObj = false;
 
 				Saver saver;
 				saver.clearAll();
-				saver.load(name, false);
-			}
-		}
-
-		window->draw(Option);
-		window->draw(optiontext);
-		pos.y -= size.y;
-		if (pos.y < window->getSize().y / 4) {
-			pos.y = window->getSize().y - 4 - (size.y / 2);
-			pos.x += size.x + 4;
-		}
-	}
-}
-
-void Menu::displayLoadObj()
-{
-	std::vector<std::string> files = getFiles(".\\Saves\\Custom");
-	sf::Vector2f size = { 200, 80 };
-	sf::Vector2f pos = { (size.x / 2) + 4, window->getSize().y - 4 - (size.y / 2) };
-
-	for (std::string s : files) {
-		std::string name = nameFromPath(s, ".json");
-
-		sf::RectangleShape Option(size);
-
-		Option.setFillColor(sf::Color(0, 52, 207));
-		Option.setOutlineThickness(4);
-		Option.setOutlineColor(sf::Color(0, 24, 94));
-		Option.setOrigin(sf::Vector2f(Option.getSize()) / 2.0f);
-		Option.setPosition(pos);
-
-		sf::Text optiontext;
-		optiontext.setFont(arial);
-		optiontext.setPosition(pos.x - (name.length() * 12), pos.y - 25);
-		optiontext.setFillColor(sf::Color::Black);
-		optiontext.setCharacterSize(48);
-		optiontext.setString(name);
-
-		if (Option.getGlobalBounds().contains(sf::Vector2f(sf::Mouse::getPosition(*window)))) {
-			if (left) {
-				Option.setFillColor(sf::Color(35, 47, 84));
-				Option.setOutlineColor(sf::Color(23, 29, 46));
-			}
-			else if (lastleft) {
-				this->loadTemp = false;
-				this->m_isAdding = false;
-				this->m_isLoading = false;
-				this->istemplate = false;
-				this->isObj = false;
-				this->loadObj = false;
-
-				Saver saver;
-				saver.clearAll();
-				saver.load(name, true);
+				saver.load(name);
 			}
 		}
 
@@ -412,18 +357,6 @@ void Menu::setupLoadMenu()
 	LoadAsTempText.setPosition(LoadAsTemplate.getPosition() + sf::Vector2f(15, 10));
 }
 
-void Menu::loadAsObj()
-{
-	loadObj = true;
-	istemplate = false;
-	m_isLoading = false;
-}
-
-void Menu::saveAsObj()
-{
-	isObj = true;
-}
-
 void Menu::updateMenu()
 {
 	resetAddItemPos();
@@ -433,10 +366,10 @@ void Menu::updateMenu()
 	
 	if (!left && lastleft) {
 		if (hover) {
-			m_isAdding = true;
+			isAdding = true;
 		}
-		if (save.getGlobalBounds().contains(mousePos)) m_isSaving = true;
-		if (Load.getGlobalBounds().contains(mousePos)) m_isLoading = true;
+		if (save.getGlobalBounds().contains(mousePos)) isSaving = true;
+		if (Load.getGlobalBounds().contains(mousePos)) isLoading = true;
 		addItem.setColor(sf::Color::White);
 		save.setColor(sf::Color::White);
 		Load.setColor(sf::Color::White);
@@ -453,30 +386,19 @@ void Menu::display()
 	window->draw(addItem);
 	window->draw(save);
 	window->draw(Load);
-
-	if (m_isLoading && !loadTemp && !loadObj) displayLoadMenu();
+	
+	if (isLoading && !loadTemp) displayLoadMenu();
 	else if (loadTemp) {
 		displayLoadTemp();
 	}
-	else if (loadObj) {
-		displayLoadObj();
-	}
-	else if (m_isAdding) displayAddMenu();
-	else if (m_isSaving && !istemplate) {
+	else if (isAdding) displayAddMenu();
+	else if (isSaving && !istemplate) {
 		displaySaveMenu();
 	}
 	if (istemplate) {
 		std::string name = i->update();
 		if (!name.empty()) {
-			mysave->save(name, false);
-			return;
-		}
-		i->draw();
-	}
-	else if (isObj) {
-		std::string name = i->update();
-		if (!name.empty()) {
-			mysave->save(name, true);
+			mysave->save(name);
 			return;
 		}
 		i->draw();
